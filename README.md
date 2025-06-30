@@ -17,6 +17,13 @@
 - Solo caracteres permitidos: `0`, `1`, `N`, `S`, `E`, `W`, espacios.
 - Un único punto de spawn del jugador.
 - Cerrado por paredes (los bordes deben ser `1` o espacios que no conecten con `0`).
+- **Duda:** ¿Se consideraría un mapa abierto cuando es posible un paso en diagonal?
+
+```text
+111  <---
+1001
+1111
+```
 
 ### 2. Cargar el Mapa en Memoria (Array 2D)
 
@@ -24,7 +31,17 @@
 1. **Parsear línea por línea**:
    - Separar elementos de configuración del mapa.
 2. **Crear array 2D**:
-   - Usar `malloc` para cada fila.
+   - Recorrer el mapa una vez, para contar el número de líneas y la longitud de la línea más larga.
+   - Crear un array dinámico con `malloc()` mapa[numero_de_lineas][ancho_de_linea].
    - Rellenar con espacios si es necesario para rectangularizar.
 3. **Verificar cierre del mapa**:
    - Usar flood fill o método similar para asegurar que el mapa está cerrado.
+
+### 3. Crear motor gráfico
+
+1. **Representación del personaje: posición y dirección**
+2. **Dibujar la imagen**
+   - Algoritmo de trazado de rayos. Debe medir la distancia hasta el obstáculo más próximo.
+   - Un rayo para cada x de la imagen que queremos dibujar. ¿Cuántos grados de desviación entre un rayo y el siguiente?
+   - El tamaño de la columna se calcula en base a la distancia del obstáculo.
+   - (...)
