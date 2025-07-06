@@ -1,5 +1,8 @@
 # CUB3D
 
+## AVISOS!!
+	- Voy a usar la "minilibx-linux" oficial. Apartamos la "MLX 42 codam".
+
 ## Lista de Tareas
 
 ### 1. Validar el Mapa
