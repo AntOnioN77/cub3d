@@ -2,6 +2,9 @@
 
 ## AVISOS!!
 	- Voy a usar la "minilibx-linux" oficial. Apartamos la "MLX 42 codam".
+	- Hay un monton de codigo de prueba, que no puede quedar en la version final:
+		*Para tener un mapa de pruebas, sin las funciones de parseo.
+		*Para mostrar un minimapa que indique hacia donde mira el personaje.
 
 ## Lista de Tareas
 

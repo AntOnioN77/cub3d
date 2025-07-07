@@ -54,7 +54,6 @@ int main(void)
         return (1);
     } //FIN MOOK
 
-	draw_a_square(data);
 	mlx_put_image_to_window(data->mlx, data->window, data->img, 0, 0);
 
 	mlx_key_hook(data->window, &manage_key, &world);
