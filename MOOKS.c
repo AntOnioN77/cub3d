@@ -61,7 +61,7 @@ void render_map(t_map_data *map_data)
 
                 for (int i = start_y; i < end_y; i++)
                     for (int j = start_x; j < end_x; j++)
-                        mlx_pixel_put(map_data->mlx, map_data->window, j, i, color);
+                        ft_pixel_put(&(map_data->data), j, i, color);
             }
         }
     }
@@ -72,7 +72,7 @@ void render_map(t_map_data *map_data)
     int player_y = (int)((world->map_height - 1 - world->char_position.y) * tile_size); // Invertir el eje Y
     for (int i = player_y - player_size / 2; i < player_y + player_size / 2; i++)
         for (int j = player_x - player_size / 2; j < player_x + player_size / 2; j++)
-            mlx_pixel_put(map_data->mlx, map_data->window, j, i, 0xFF0000); // Rojo para el personaje
+           ft_pixel_put(&(map_data->data), j, i, 0xFF0000); // Rojo para el personaje
 
     // Dibujar la dirección del personaje
     int dir_length = tile_size; // Longitud de la dirección
@@ -80,17 +80,18 @@ void render_map(t_map_data *map_data)
     int dir_y = (int)(player_y - world->char_direction.sin * dir_length); // Invertir el eje Y
     for (int i = -2; i <= 2; i++) // Línea más gruesa
     {
-		ft_pixel_put((t_data *)map_data, dir_x + i, dir_y, 0x00FF00);
-		ft_pixel_put((t_data *)map_data, dir_x, dir_y + i, 0x00FF00);
+		ft_pixel_put(&(map_data->data), dir_x + i, dir_y, 0x00FF00);
+		ft_pixel_put(&(map_data->data), dir_x, dir_y + i, 0x00FF00);
         //mlx_pixel_put(map_data->mlx, map_data->window, dir_x + i, dir_y, 0x00FF00); // Verde para la dirección
         //mlx_pixel_put(map_data->mlx, map_data->window, dir_x, dir_y + i, 0x00FF00);
     }
-	mlx_put_image_to_window(map_data->mlx, map_data->window, map_data->img, 0, 0);
+	mlx_put_image_to_window(map_data->data.mlx, map_data->data.window, map_data->data.img, 0, 0);
 }
 
 int update_map(void *param)
 {
     render_map((t_map_data *)param);
+	usleep(10000);
     return (0);
 }
 
@@ -98,9 +99,13 @@ void draw_map(t_world *world)
 {
     void *mlx = mlx_init();
     void *window = mlx_new_window(mlx, world->map_width * 20, world->map_height * 20, "Map View");
-    t_map_data map_data = {0, 0, 0, 0, 0, world, mlx, window, 20};
-	map_data.img = mlx_new_image(window, world->map_width * 20, world->map_height * 20);
-	map_data.addr = mlx_get_data_addr(&(map_data.img), &(map_data.bits_per_pixel), &(map_data.line_length), &(map_data.endian));
+    t_map_data map_data;
+	map_data.world = world;
+	map_data.tile_size = 20;
+	map_data.data.window = window;
+	map_data.data.mlx = mlx;
+	map_data.data.img = mlx_new_image(mlx, world->map_width * 20, world->map_height * 20);
+	map_data.data.addr = mlx_get_data_addr(map_data.data.img, &(map_data.data.bits_per_pixel), &(map_data.data.line_length), &(map_data.data.endian));
     // Registrar la función de actualización en el bucle principal
     mlx_loop_hook(mlx, update_map, &map_data);
 

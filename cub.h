@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/07 22:01:25 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/07 22:13:19 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,16 +94,9 @@ int		init_data(t_data **data);
 #include <pthread.h>
 typedef struct s_map_data
 {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-
     t_world *world;
-    void    *mlx;
-    void    *window;
     int     tile_size;
+	t_data	data;
 } t_map_data;
 	//MOOKS.c (funciones de prueba y debugging)
 void rotate_direction(t_vector *direction, double angle);
