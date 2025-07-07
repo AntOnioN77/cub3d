@@ -1,6 +1,6 @@
 NAME = cub3D
 CC = cc
-SOURCES = main.c utils_for_mlx.c
+SOURCES = main.c utils_for_mlx.c MOOKS.c
 OBJECTS = $(SOURCES:.c=.o)
 HEADERS = fractol.h
 MLX_DIR = ./minilibx-linux/

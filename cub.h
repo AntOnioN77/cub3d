@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/07 20:16:32 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/07 22:01:25 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 # define WINDOW_WIDTH 800
 # define WINDOW_HEIGHT 800
 
+
+# define M_PI 3.14159265358979323846
 typedef struct s_point
 {
     double x;
@@ -86,6 +88,29 @@ int		free_data(t_data **data, int error_code);
 int		close_win(t_world *world);
 int		init_data(t_data **data);
 
+//___________________________________
+// BORRAR ANTES DE ENTREGAR MOOKS    //
+//___________________________________//
+#include <pthread.h>
+typedef struct s_map_data
+{
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
 
+    t_world *world;
+    void    *mlx;
+    void    *window;
+    int     tile_size;
+} t_map_data;
+	//MOOKS.c (funciones de prueba y debugging)
+void rotate_direction(t_vector *direction, double angle);
+void draw_a_square(t_data *img);
+void *map_thread(void *arg);
+void render_map(t_map_data *map_data);
+int update_map(void *param);
+void draw_map(t_world *world);
 
 #endif

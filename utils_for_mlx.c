@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 16:59:20 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/06 18:12:12 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/07 21:13:59 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,23 @@ void	ft_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int *)pixel = color;
 }
 
+
 int	manage_key(int keycode, t_world *world)
 {
+printf("keycode:%d", keycode); //borraesto
+fflush(NULL);
 	if (keycode == 65307)
 	{
 		close_win(world);
 	}
+	//MOOK ineficiente, solo pruebas
+	else if (keycode == 'd')
+    {
+        rotate_direction(&world->char_direction, M_PI / 18);
+		printf("char_direction: Y%f-x%f\n", world->char_direction.sin, world->char_direction.cos);
+		fflush(NULL);
+	}
+	//finMOOK
 	return (1);
 }
 
