@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 16:59:20 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/06 14:49:49 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/06 18:12:12 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@ int	free_data(t_data **data, int error_code)
 		perror("mlx_new_image() fail in init_data");
 	if (error_code == 4)
 		perror("mlx_get_data_addr() fail in init_data");
-	if ((*data)->img)
+	if (*data && (*data)->img)
 		mlx_destroy_image((*data)->mlx, (*data)->img);
-	if ((*data)->mlx && (*data)->window)
+	if (*data && (*data)->mlx && (*data)->window)
 		mlx_destroy_window((*data)->mlx, (*data)->window);
-	if ((*data)->mlx)
+	if (*data && (*data)->mlx)
 	{
 		mlx_destroy_display((*data)->mlx);
 		free((*data)->mlx);
@@ -57,7 +57,8 @@ int	free_data(t_data **data, int error_code)
 int	close_win(t_world *world)
 {
 	free_data(&(world->data), CLOSING_WINDOW);
-	//free(world->cplane);  //copiado de fractol, liberar lo que qrequiera ser liberado de world aqui
+	//free_map(world->map);
+	
 	exit(EXIT_SUCCESS);
 }
 
@@ -75,7 +76,7 @@ int	init_data(t_data **data)
 	if ((*data)->mlx == NULL)
 		exit (free_data(data, ERROR_MLX_INIT));
 	(*data)->window = mlx_new_window((*data)->mlx, WINDOW_WIDTH, WINDOW_HEIGHT,
-			"fractol");
+			"cub3D");
 	if ((*data)->window == NULL)
 		exit (free_data(data, ERROR_MLX_NEW_WINDOW));
 	(*data)->img = mlx_new_image((*data)->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);

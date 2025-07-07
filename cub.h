@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/06 14:45:09 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/07 20:16:32 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "minilibx-linux/mlx.h"
 # include <math.h>
 # include "libft/libft.h"
+#include <stdio.h>
 
 # define ERROR_MLX_INIT 1
 # define ERROR_MLX_NEW_WINDOW 2
@@ -31,11 +32,11 @@ typedef struct s_point
     double y;
 } t_point;
 
-typedef struct s_direction
+typedef struct s_vector
 {
     double cos;
     double sin;
-} t_direction;
+} t_vector;
 
 typedef struct s_data
 {
@@ -59,10 +60,8 @@ typedef struct s_frame
 
 typedef struct s_world
 {
-
-
-	char floor_color;
-	char ceiling_color;
+	int floor_color;
+	int ceiling_color;
 
 	char *no_texture;
 	char *so_texture;
@@ -76,7 +75,7 @@ typedef struct s_world
 
 
 	t_point char_position;
-	t_direction char_direction;
+	t_vector char_direction;
 	t_data *data;
 }		t_world;
 
