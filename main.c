@@ -54,7 +54,7 @@ int main(void)
         return (1);
     } //FIN MOOK
 
-	mlx_put_image_to_window(data->mlx, data->window, data->img, 0, 0);
+	
 
 	mlx_key_hook(data->window, &manage_key, &world);
 	mlx_hook(data->window, 17, 0, &close_win, &world);

@@ -36,6 +36,10 @@ int	manage_key(int keycode, t_world *world)
 		fflush(NULL);
 	}
 	//finMOOK
+	else
+	{
+		world->key = keycode;
+	}
 	return (1);
 }
 

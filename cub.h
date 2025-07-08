@@ -75,7 +75,7 @@ typedef struct s_world
 	int map_height; //Medidas tomadas despues de rectangulizar el mapa
 	int map_width;
 
-
+	int		key;
 	t_point char_position;
 	t_vector char_direction;
 	t_data *data;
