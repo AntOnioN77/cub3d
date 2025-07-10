@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/10 18:05:20 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/10 20:41:05 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,12 @@ typedef struct s_data
 
 typedef struct s_ray
 {
-	double side_dist_x;
+	int 	tile_x; //casilla actual durante el calculo (no es el origen)
+	double	side_dist_x;
 	double	delta_dist_x;
 	int		step_x;
 
+	int		tile_y;
 	double	side_dist_y;
 	double	delta_dist_y;
 	int		step_y;
@@ -88,8 +90,8 @@ typedef struct s_frame
 */
 typedef struct s_textures
 {
-	int floor_color;
-	int ceiling_color;
+	int	floor_color;
+	int	 ceiling_color;
 	char *no_texture;
 	char *so_texture;
 	char *we_texture;
@@ -98,12 +100,8 @@ typedef struct s_textures
 
 typedef struct s_world
 {
-
-
 	t_textures textures;
-
-
-
+	
 	//una funcion debe sustituir N S E o W por un cero, despues de anotar posicion y direccion del jugador en el struct world.
 	char **map; 
 	int map_height; //Medidas tomadas despues de rectangulizar el mapa
