@@ -3,6 +3,7 @@
 		"math.h": "c",
 		"mlx_int.h": "c",
 		"stdlib.h": "c",
-		"string.h": "c"
+		"string.h": "c",
+		"libft.h": "c"
 	}
 }

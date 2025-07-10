@@ -20,20 +20,26 @@ char* map[] = {
    "        1111111111111111111111111"
 };
 
-int init_world(t_world *world, t_data **data)
+int init_world(t_world world, t_data **data)
 {
-		world->data = *data;
+		world.data = *data;
 
 		//MOOK valores hardcodeados, para empezar con la logica matematica de raycasting:
-		world->ceiling_color = 225<<16 | 30<<8 | 0;
-		world->floor_color = 220<<16 | 100<<8 | 0;
-		world->map = map;
-		world->char_position.y = 2.0; 
-		world->char_position.x = 26;
-		world->char_direction.sin= 1;
-		world->char_direction.cos = 0;
-		world->map_height = 14;
-		world->map_width = 33;
+		world.ceiling_color = 225<<16 | 30<<8 | 0;
+		world.floor_color = 220<<16 | 100<<8 | 0;
+		world.map = map;
+		world.char_position.y = 2.5; // 
+		world.char_position.x = 26.5;
+		world.char_direction.y= 1;
+		world.char_direction.x = 0;
+		world.map_height = 14;
+		world.map_width = 33;
+		//en caso de error llamar a free_data(*data, 5) talcual esta hardcodeado con valores de ejemplo, el error es imposible
+
+		//Crea la matriz de vectores inicial (centrada en 0.0 , 0.0), a par tir de la cual se calcularan
+		//	las subsigientes matrices en funcion de a donde mire el personaje
+		init_vectors(world.template_vectors, world.char_direction);
+
 		return (0);
 }
 
@@ -43,7 +49,7 @@ int main(void)
 	t_data *data;
 
 	init_data(&data);
-	if (0 != init_world(&world, &data))
+	if (0 != init_world(world, &data))
 		return (1);
 	
 	//MOOK Crear el hilo para el mapa
@@ -56,8 +62,10 @@ int main(void)
 
 	
 
-	mlx_key_hook(data->window, &manage_key, &world);
-	mlx_hook(data->window, 17, 0, &close_win, &world);
+	mlx_hook(data->window, KEY_PRESS, KEY_PRESS_MASK, press_key, &world);
+	mlx_hook(data->window, KEY_RELEASE, KEY_RELEASE_MASK, release_key, &world);
+	mlx_hook(data->window, DESTROY_NOTIFY, 0, close_win, &world);
+	mlx_loop_hook(data->window, motor, &world);
 	mlx_loop(data->mlx);
 
 	pthread_join(map_thread_id, NULL); //BORRAR!!
