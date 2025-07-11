@@ -12,6 +12,26 @@
 
 #include "cub.h"
 
+// paso template vector como puntero para evitar copias de memoria
+void	calculate_vector(int i, const t_vector *template_vector ,t_vector *screen_vector)
+{
+
+	//POR HACER
+}
+
+
+void recalculate_vectors(t_vector *char_direction, t_vector **template_vectors, t_vector **screen_vectors)
+{
+	int	i;
+	//Recalcular screen_vectors para la nueva direccion del personaje
+	// POR HACER: Aqui entraria una buena optimizacion, comprobar si world->char_direction, ha cambiado desde la anterior llamada a esta funcion (con una variable estatica)
+	while(i < WINDOW_WIDTH)
+	{
+		calculate_vector(i, &(template_vectors[i]) ,screen_vectors[i]);
+		i++;
+	}
+}
+
 //LLamada iterativamente por mlx_loop_hook() debe actualizar la imagen y
 // empujarla a la ventana 
 int	motor(t_world *world)
@@ -28,6 +48,7 @@ int	motor(t_world *world)
 	// -Recalcula screen_vectors
 	check_loock(world, screen_vectors);
 
+	recalculate_vectors(&(world->char_direction), world->template_vectors, screen_vectors);
 
 	//Redibujar imagen
 	draw_image(world, screen_vectors);
@@ -38,15 +59,6 @@ int	motor(t_world *world)
 
 }
 
-// paso template vector como puntero para evitar copias de memoria
-calculate_vector(int i, const t_vector *template_vector ,t_vector *screen_vector)
-{
-
-	//POR HACER
-}
-
-;
-
 void draw_image(t_world *world, t_vector screen_vectors[])
 {
 	int i;
@@ -54,13 +66,7 @@ void draw_image(t_world *world, t_vector screen_vectors[])
 	t_wall wall[WINDOW_WIDTH];
 
 	i = 0;
-	//Recalcular screen_vectors para la nueva direccion del personaje
-	// POR HACER: Aqui entraria una buena optimizacion, comprobar si world->char_direction, ha cambiado desde la anterior llamada a esta funcion (con una variable estatica)
-	while(i < WINDOW_WIDTH)
-	{
-		calculate_vector(i, &(world->template_vectors[i]) ,&(screen_vectors[i]));
-		i++;
-	}
+
 	
 	calculate_distances(world, screen_vectors, distances, wall);
 	//por hacer:

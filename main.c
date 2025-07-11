@@ -25,8 +25,8 @@ int init_world(t_world world, t_data **data)
 		world.data = *data;
 
 		//MOOK valores hardcodeados, para empezar con la logica matematica de raycasting:
-		world.ceiling_color = 225<<16 | 30<<8 | 0;
-		world.floor_color = 220<<16 | 100<<8 | 0;
+		world.textures.ceiling_color = 225<<16 | 30<<8 | 0;
+		world.textures.floor_color = 220<<16 | 100<<8 | 0;
 		world.map = map;
 		world.char_position.y = 2.5; // 
 		world.char_position.x = 26.5;

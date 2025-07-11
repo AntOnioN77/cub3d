@@ -32,7 +32,6 @@ int	press_key(int keycode, t_world *world)
 	else if (keycode == 'd')
     {
         rotate_direction(&world->char_direction, M_PI / 18.0 );
-		printf("char_direction: Y%f X%f\n", world->char_direction.sin, world->char_direction.cos);
 		fflush(NULL);
 	}
 	//finMOOK
