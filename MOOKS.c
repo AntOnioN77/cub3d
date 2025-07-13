@@ -8,11 +8,11 @@ void secure_pixel_put(t_data *data, int x, int y, int color);
 //MOOK solo para pruebas!!
 void rotate_direction(t_vector *direction, double angle)
 {
-    double old_cos = direction->cos;
-    double old_sin = direction->sin;
+    double old_cos = direction->x;
+    double old_sin = direction->y;
 
-    direction->cos = old_cos * cos(angle) + old_sin * sin(angle);
-    direction->sin = -old_cos * sin(angle) + old_sin * cos(angle);
+    direction->x = old_cos * cos(angle) + old_sin * sin(angle);
+    direction->y = -old_cos * sin(angle) + old_sin * cos(angle);
 
 }
 
@@ -87,7 +87,7 @@ void render_map(t_map_data *map_data)
 
     // Dibujar las líneas de visión del personaje
     double angle_offset = M_PI / 6; // 60 grados dividido entre 2
-    double base_angle = atan2(world->char_direction.sin, world->char_direction.cos);
+    double base_angle = atan2(world->char_direction.y, world->char_direction.x);
     double left_angle = base_angle - angle_offset;
     double right_angle = base_angle + angle_offset;
 

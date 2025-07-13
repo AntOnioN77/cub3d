@@ -6,49 +6,49 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:09:58 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/11 13:40:40 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/13 22:07:17 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub.h"
 
-// paso template vector como puntero para evitar copias de memoria
-void	calculate_vector(int i, const t_vector *template_vector ,t_vector *screen_vector)
-{
-
-	//POR HACER
-}
 
 
-void recalculate_vectors(t_vector *char_direction, t_vector **template_vectors, t_vector **screen_vectors)
+void recalculate_vectors(t_vector *char_direction, t_vector *plane_camera, t_vector *screen_vectors)
 {
 	int	i;
+	double plane_portion;
 	//Recalcular screen_vectors para la nueva direccion del personaje
 	// POR HACER: Aqui entraria una buena optimizacion, comprobar si world->char_direction, ha cambiado desde la anterior llamada a esta funcion (con una variable estatica)
+	i = 0;
 	while(i < WINDOW_WIDTH)
 	{
-		calculate_vector(i, &(template_vectors[i]) ,screen_vectors[i]);
+		plane_portion = i * 2.0 / WINDOW_WIDTH - 1.0; //de -1 a 1
+		screen_vectors[i].x = char_direction->x + plane_camera->x * plane_portion;
+		screen_vectors[i].y = char_direction->y + plane_camera->y * plane_portion;
 		i++;
 	}
 }
+
+
 
 //LLamada iterativamente por mlx_loop_hook() debe actualizar la imagen y
 // empujarla a la ventana 
 int	motor(t_world *world)
 {
 	t_data *data;
-	t_vector screen_vectors[WINDOW_WIDTH];
+	t_vector screen_vectors[WINDOW_WIDTH + 1]; //+1 para evitar overflow
 
 	data = world->data;
 
-	
+printf("motor() ejecutado.\n");
 	//Verifica cual es la ultima tecla que se pulso (y permanece pulsada)
 	//si fue un giro de camara <- o -> 
 	// -Actualiza el valor en world.char_direction
 	// -Recalcula screen_vectors
-	check_loock(world, screen_vectors);
+	check_loock(world);
 
-	recalculate_vectors(&(world->char_direction), world->template_vectors, screen_vectors);
+	recalculate_vectors(&(world->char_direction),&(world->plane_direction), screen_vectors);
 
 	//Redibujar imagen
 	draw_image(world, screen_vectors);
@@ -68,9 +68,17 @@ void draw_image(t_world *world, t_vector screen_vectors[])
 	i = 0;
 
 	
-	calculate_distances(world, screen_vectors, distances, wall);
-	//por hacer:
-	//print_column(distances, world->data, world->textures);
+//	calculate_distances(world, screen_vectors, distances, wall);
+	while(i < WINDOW_WIDTH)
+	{
+printf("-------------ray[%d]-----------\n", i);
+printf("screen_vectors[%d] == [%f, %f]\n", i, screen_vectors[i].x, screen_vectors[i].y);
+		distances[i] = one_ray((const char**)world->map, &(world->char_position) , &(screen_vectors[i]), &(wall[i]), world);
+printf("	distance[%d] == %f\n",i, distances[i]);
+		i++;
+	}
+	
+	print_columns(distances, world->data, world->textures);
 }
 
 
@@ -132,7 +140,7 @@ printf("side_dist_x:%f, side_dist_y:%f\n", ray.side_dist_x, ray.side_dist_y);
 printf("delta_dist_x:%f, delta_dist_y:%f\n", ray.delta_dist_x, ray.delta_dist_y);
 	while(1)
 	{
-		if(ray.tile_x < 0 || ray.tile_y < 0 || ray.tile_x >= (world->map_width) || ray.tile_x >= (world->map_height))
+		if(ray.tile_x < 0 || ray.tile_y < 0 || ray.tile_x >= (world->map_width) || ray.tile_y >= (world->map_height))
 		{
 printf("map[%d][%d] ha explotado.\n", ray.tile_y, ray.tile_x);
 			*wall = 7;
@@ -173,7 +181,7 @@ printf("     --HORIZONTAL--\n ray.step_y:%d, ray.tile_y:%d, ray.side_dist_y:%f\n
 	}
 }
 
-
+/*//innecesaria
 void calculate_distances(t_world *world, const t_vector vectors[], double distances[], t_wall *wall)
 {
 	int i;
@@ -187,3 +195,4 @@ printf("	distance[%d] == %f\n",i, distances[i]);
 		i++;
 	}
 }
+*/

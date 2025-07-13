@@ -1,6 +1,6 @@
 NAME = cub3D
 CC = cc
-SOURCES = main.c utils_for_mlx.c MOOKS.c
+SOURCES = main.c utils_for_mlx.c render.c check_loock.c MOOKS.c 
 OBJECTS = $(SOURCES:.c=.o)
 HEADERS = fractol.h
 MLX_DIR = ./minilibx-linux/
@@ -27,7 +27,7 @@ optimized: fclean all
 leaks: CFLAGS += $(FSAN_FLAGS)
 leaks: fclean all
 debug: CFLAGS += -g3
-debug: fclean all
+debug: clean all
 clean:
 	$(MAKE) -C $(MLX_DIR) clean
 	$(MAKE) -C $(LIBFT_DIR) clean

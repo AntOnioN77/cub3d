@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/10 20:41:05 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/13 21:55:35 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # include "libft/libft.h"
 #include <stdio.h>
 
+//Calcula el vector perpendicular a char_direction,
+//PLANE_MAGNITUDE = tan(FOV / 2) = tan(π/6) ≈ 0.577
+# define PLANE_MAGNITUDE 0.577
 # define ERROR_MLX_INIT 1
 # define ERROR_MLX_NEW_WINDOW 2
 # define ERROR_MLX_NEW_IMAGE 3
@@ -26,7 +29,8 @@
 # define WINDOW_WIDTH 800
 # define WINDOW_HEIGHT 800
 # define MAX_RAY_DISTANCE 1e30
-# define PLAYER_ROTATION_STEP 0.06 
+# define PLAYER_ROTATION_STEP 0.06
+# define PLAYER_MOVE_STEP 0.1
 //Redefinimos macros de X.h con otro nombre, por ambiguedad en La Norma
 	// Eventos
 #define KEY_PRESS        2
@@ -81,15 +85,9 @@ typedef struct s_ray
 
 }	t_ray;
 
-/*
-typedef struct s_frame
-{
-	t_data		*data;
-	// mapa, plano cartesiano etc
-}		t_frame;
-*/
 typedef struct s_textures
 {
+	int wall_color; //BORRAR es de prueba!!
 	int	floor_color;
 	int	 ceiling_color;
 	char *no_texture;
@@ -106,13 +104,20 @@ typedef struct s_world
 	char **map; 
 	int map_height; //Medidas tomadas despues de rectangulizar el mapa
 	int map_width;
-	t_vector template_vectors[WINDOW_WIDTH];
-
 	int		key;
 	t_vector char_position;
 	t_vector char_direction;
-	t_data *data;
+	t_vector plane_direction; //perpendicular a char_direction, para calcular el vector de vision
+	t_vector step_rotation; //vector de rotacion, calculado a partir de PLAYER_ROTATION_STEP
+	t_data *data; //puntero a la estructura de datos de la ventana y la imagen
 }		t_world;
+
+//check_loock.c
+void check_loock(t_world *world);
+void rotate_vector(t_vector *vector, t_vector step_rotation, int direction);
+
+//main.c
+void	calculate_camera_plane(double char_dir_x, double char_dir_y, t_vector *plane_direction);
 
 //utils_for_mlx.c
 void	ft_pixel_put(t_data *data, int x, int y, int color);
@@ -124,6 +129,13 @@ int		init_data(t_data **data);
 
 //render.c
 int	motor(t_world *world);
+double	one_ray(const char **map, t_vector *char_position, const t_vector *vector, t_wall *wall, t_world *world);
+void recalculate_vectors(t_vector *char_direction, t_vector *plane_direction, t_vector screen_vectors[]);
+void draw_image(t_world *world, t_vector screen_vectors[]);
+void init_ray(t_vector *char_position, const t_vector *vector, t_ray *ray);
+void calculate_distances(t_world *world, const t_vector vectors[], double distances[], t_wall *wall);
+void print_columns(double distances[], t_data *data, t_textures textures);
+void calc_side_dist(t_ray *ray, t_vector *char_position, const t_vector *vector);
 
 //+++++++++++++++++++++++++++++++++++//
 // BORRAR ANTES DE ENTREGAR MOOKS    //
