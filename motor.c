@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render.c                                           :+:      :+:    :+:   */
+/*   motor.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:09:58 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/14 21:56:05 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/14 23:00:21 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,24 @@ void draw_image(t_world *world)
 	while(i < WINDOW_WIDTH)
 	{
 		distance = one_ray(i, &(wall), world);
-		print_one_column(world, i, distance, wall);//PENDIENTE!!
+		print_one_column(world, i, distance, wall);
 		i++;
 	}
+}
+
+print_one_column(t_world *world, int column, double distance, t_wall wall)
+{
+	//·t_wall wall· indica que textura debemos utilizar
+	//·distance· es la distancia al muro
+	//·column· es la columna de la pantalla donde se dibuja el muro
+	
+	//faltaria otro valor. Lugar exacto del muro donde ha impactado el rayo,
+	//  puede calcularse con char_direction, char position y distance.
+	//  tal vez sea mejor intentar que one_ray() lo calcule. Lo vamos viendo.
+
+
+
+
 }
 
 // ray->side_dist_x:Cuanto falta hasta la proxima linea
@@ -92,6 +107,23 @@ void init_ray(t_vector *char_position, const t_vector *vector, t_ray *ray)
 	calc_side_dist(ray, char_position, vector);
 }
 
+void	set_wall_type(t_wall *wall, t_vector *vector)
+{
+	if (*wall == VERTICAL)
+	{
+		if (vector->x > 0)
+			*wall = EAST;
+		else
+			*wall = WEST;
+	}
+	else if (*wall == HORIZONTAL)
+	{
+		if (vector->y > 0)
+			*wall = NORTH;
+		else
+			*wall = SOUTH;
+	}
+}
 
 double	one_ray(int i, t_wall *wall, t_world *world)
 {
@@ -113,7 +145,7 @@ if(DEBUGMODE){printf("delta_dist_x:%f, delta_dist_y:%f\n", ray.delta_dist_x, ray
 		{
 if(DEBUGMODE){printf("map[%d][%d] ha explotado.\n", ray.tile_y, ray.tile_x);}
 			*wall = 7;
-			return 7470000.747;
+			return 7470000.747;//error
 		}
 		if(map[ray.tile_y][ray.tile_x] == '1')
 		{
@@ -121,12 +153,14 @@ if(DEBUGMODE){printf("map[%d][%d] ha explotado.\n", ray.tile_y, ray.tile_x);}
 			{
 if(DEBUGMODE){printf("ray.tile_x - char_position->x + (1 - ray.step_x) / 2) / vector->x \n %d - %f + (1 - %d) / 2) / %f\n", ray.tile_x, char_position->x, ray.step_x, vector.x);}
 if(DEBUGMODE){printf("     --VERTICAL--\n ray.step_y:%d, ray.tile_y:%d, ray.side_dist_y:%f\n", ray.step_y, ray.tile_y, ray.side_dist_y);}
+				set_wall_type(wall, &vector);
 				return((ray.tile_x - char_position->x + (1 - ray.step_x) / 2) / vector.x);
 			}
 			if(*wall == HORIZONTAL)
 			{
 if(DEBUGMODE){printf("ray.tile_y - char_position->y + (1 - ray.step_y) / 2) / vector->y \n %d - %f + (1 - %d) / 2) / %f\n", ray.tile_y, char_position->y, ray.step_y, vector.y);}
 if(DEBUGMODE){printf("     --HORIZONTAL--\n ray.step_y:%d, ray.tile_y:%d, ray.side_dist_y:%f\n", ray.step_y, ray.tile_y, ray.side_dist_y);}
+				set_wall_type(wall, &vector);
 				return((ray.tile_y - char_position->y + (1 - ray.step_y) / 2) / vector.y);
 			}
 		}

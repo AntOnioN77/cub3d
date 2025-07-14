@@ -1,6 +1,6 @@
 NAME = cub3D
 CC = cc
-SOURCES = main.c utils_for_mlx.c render.c char_movement.c 
+SOURCES = main.c utils_for_mlx.c motor.c char_movement.c 
 OBJECTS = $(SOURCES:.c=.o)
 HEADERS = cub.h
 MLX_DIR = ./minilibx-linux/
