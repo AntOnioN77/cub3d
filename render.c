@@ -6,47 +6,27 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:09:58 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/14 12:36:58 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/14 21:56:05 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub.h"
-
-
-
-
-
-
-//Funcion que toma las distancias de cada rayo y dibuja una columna roja de un tamaño proporcional
-// a la distancia del rayo, en la imagen de la ventana, el cielo y el suelo son tonos de gris
-// y el color de la pared es rojo
-void print_columns(double distances[], t_data *data, t_textures textures)
-{
-	//por hacer
-}
-
 
 //LLamada iterativamente por mlx_loop_hook() debe actualizar la imagen y
 // empujarla a la ventana 
 int	motor(t_world *world)
 {
 	t_data *data;
-	t_vector screen_vectors[WINDOW_WIDTH + 1]; //+1 para evitar overflow
-
 	data = world->data;
 
 	//Verifica cual es la ultima tecla que se pulso (y permanece pulsada)
-	//si fue un giro de camara <- o -> 
 	// -Actualiza el valor en world.char_direction
-	// -Recalcula screen_vectors
-	check_loock(world);
-
-	recalculate_vectors(&(world->char_direction),&(world->plane_direction), screen_vectors);
+	// -Actualiza el valor en world.char_position
+	char_movement(world);
 
 	//Redibujar imagen
 	draw_image(world);
-if(DEBUGMODE){sleep(2);}
-
+	//Poner la imagen en la ventana
 	mlx_put_image_to_window(data->mlx, data->window, data->img, 0, 0);
 	return (1);
 
@@ -55,22 +35,17 @@ if(DEBUGMODE){sleep(2);}
 void draw_image(t_world *world)
 {
 	int i;
-	double distances[WINDOW_WIDTH];
-	t_wall wall[WINDOW_WIDTH];
+	double distance;
+	t_wall wall;
 
 	i = 0;
-//	calculate_distances(world, screen_vectors, distances, wall);
 	while(i < WINDOW_WIDTH)
 	{
-if(DEBUGMODE){printf("-------------ray[%d]-----------\n", i);}
-		distances[i] = one_ray((const char**)world->map, &(world->char_position), i, &(wall[i]), world);
-if(DEBUGMODE){printf("	distance[%d] == %f\n",i, distances[i]);}
+		distance = one_ray(i, &(wall), world);
+		print_one_column(world, i, distance, wall);//PENDIENTE!!
 		i++;
 	}
-	
-	print_columns(distances, world->data, world->textures);
 }
-
 
 // ray->side_dist_x:Cuanto falta hasta la proxima linea
 // ray->step_x:nos mobemos a delante(1) o acia detras(-1) en x
@@ -118,11 +93,13 @@ void init_ray(t_vector *char_position, const t_vector *vector, t_ray *ray)
 }
 
 
-double	one_ray(const char **map, t_vector *char_position, int i, t_wall *wall, t_world *world)
+double	one_ray(int i, t_wall *wall, t_world *world)
 {
 	t_ray ray;
 	t_vector vector;
 	double plane_portion;
+	const char **map = (const char **)world->map;
+	t_vector *char_position = &(world->char_position);
 
 	plane_portion = i * 2.0 / WINDOW_WIDTH - 1.0; //de -1 a 1
 	vector.x = world->char_direction.x + world->plane_direction.x * plane_portion;
@@ -167,19 +144,3 @@ if(DEBUGMODE){printf("     --HORIZONTAL--\n ray.step_y:%d, ray.tile_y:%d, ray.si
 		}
 	}
 }
-
-/*//innecesaria
-void calculate_distances(t_world *world, const t_vector vectors[], double distances[], t_wall *wall)
-{
-	int i;
-
-	i = 0;
-	while(i < WINDOW_WIDTH)
-	{
-printf("-------------distance[%d]-----------\n",i);
-		distances[i] = one_ray((const char**)world->map, &(world->char_position) , &(vectors[i]), &(wall[i]), world);
-printf("	distance[%d] == %f\n",i, distances[i]);
-		i++;
-	}
-}
-*/

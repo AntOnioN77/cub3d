@@ -38,19 +38,27 @@ char* map[] = {
 };
 */
 
-void	calculate_camera_plane(double char_dir_x, double char_dir_y, t_vector *plane_direction)
+int main(void)
 {
+	t_world world;
+	t_data *data;
 
-
-	plane_direction->x = -char_dir_y * PLANE_MAGNITUDE;
-	plane_direction->y = char_dir_x * PLANE_MAGNITUDE;
+	init_data(&data);
+	if (0 != init_world(&world, data))
+		return (1);
+	mlx_hook(data->window, KEY_PRESS, KEY_PRESS_MASK, press_key, &world);
+	mlx_hook(data->window, KEY_RELEASE, KEY_RELEASE_MASK, release_key, &world);
+	mlx_hook(data->window, DESTROY_NOTIFY, 0, close_win, &world);
+	mlx_loop_hook(data->mlx, motor, &world);
+	mlx_loop(data->mlx);
+	return (0);
 }
 
-int init_world(t_world *world, t_data **data)
+//esta funcion deberia leer el archivo con el mapa y rellenar la estructura world->map
+//pero por ahora lo dejamos hardcodeado
+int init_world(t_world *world, t_data *data)
 {
-		world->data = *data;
-
-		//MOOK valores hardcodeados, para empezar con la logica matematica de raycasting:
+		world->data = data;
 		world->textures.ceiling_color = 0x0000FF;// oto//225<<16 | 30<<8 | 0;
 		world->textures.floor_color = 220<<16 | 100<<8 | 0;
 		world->map = map;
@@ -61,44 +69,15 @@ int init_world(t_world *world, t_data **data)
 		calculate_camera_plane(world->char_direction.x, world->char_direction.y, &(world->plane_direction)); //perpendicular a char_direction
 		world->map_height = 14;
 		world->map_width = 33;
-		world->textures.wall_color = 0xd2C3D98; //rojo BORRAR es de prueba!!
-		//en caso de error llamar a free_data(*data, 5) talcual esta hardcodeado con valores de ejemplo, el error es imposible
-
+		world->textures.wall_color = 0xd2C3D98; //BORRAR es de prueba!!
 		world->key = 0;
-
-
 		return (0);
 }
 
-
-int main(void)
+//Calcula un vector perpendicular a char_direction, necesario para calcular el angulo
+// con que lanzaremos los rayos, evitando el efecto ojo de pez.
+void	calculate_camera_plane(double char_dir_x, double char_dir_y, t_vector *plane_direction)
 {
-	t_world world;
-	t_data *data;
-
-	init_data(&data);
-	if (0 != init_world(&world, &data))
-		return (1);
-/*	
-	//MOOK Crear el hilo para el mapa
-	pthread_t map_thread_id;
-    if (pthread_create(&map_thread_id, NULL, map_thread, &world) != 0)
-    {
-        perror("Error al crear el hilo del mapa");
-        return (1);
-    } //FIN MOOK
-*/
-	
-printf("main.c: data->mlx == %p\n", data->mlx);
-	mlx_hook(data->window, KEY_PRESS, KEY_PRESS_MASK, press_key, &world);
-//printf("main.c: antes de mlx_hook 1\n");
-	mlx_hook(data->window, KEY_RELEASE, KEY_RELEASE_MASK, release_key, &world);
-	mlx_hook(data->window, DESTROY_NOTIFY, 0, close_win, &world);
-printf("main.c: antes de mlx_loop_hook\n");
-	mlx_loop_hook(data->mlx, motor, &world);
-	mlx_loop(data->mlx);
-
-//	pthread_join(map_thread_id, NULL); //BORRAR!!
-	return (0);
+	plane_direction->x = -char_dir_y * PLANE_MAGNITUDE;
+	plane_direction->y = char_dir_x * PLANE_MAGNITUDE;
 }
-

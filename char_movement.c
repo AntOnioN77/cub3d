@@ -2,7 +2,7 @@
 
 void rotate_normalize_vector(t_vector *vector, double sin, double cos);
 
-void check_loock(t_world *world)
+void char_movement(t_world *world)
 {
     if(world->key == 'd')
     {
