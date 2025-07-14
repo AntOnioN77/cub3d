@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 16:59:20 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/08 13:50:32 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/14 12:08:10 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ int	press_key(int keycode, t_world *world)
 	//MOOK ineficiente, solo pruebas
 	else if (keycode == 'd')
     {
-        rotate_direction(&world->char_direction, M_PI / 18.0 );
-		fflush(NULL);
+        world->key = 'd';
 	}
 	//finMOOK
 	else

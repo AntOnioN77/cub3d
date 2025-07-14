@@ -1,8 +1,8 @@
 NAME = cub3D
 CC = cc
-SOURCES = main.c utils_for_mlx.c render.c check_loock.c MOOKS.c 
+SOURCES = main.c utils_for_mlx.c render.c check_loock.c 
 OBJECTS = $(SOURCES:.c=.o)
-HEADERS = fractol.h
+HEADERS = cub.h
 MLX_DIR = ./minilibx-linux/
 MLX_LIB = $(addprefix $(MLX_DIR),libmlx_Linux.a)
 LIBFT_DIR = ./libft/
@@ -14,7 +14,7 @@ LDLIBS = -lmlx_Linux -lXext -lX11 -lm -lz -lft
 OP_FLAGS = -O3 -ffast-math -march=native
 FSAN_FLAGS = -g3 -fsanitize=address
 all: $(MLX_LIB) $(LIBFT_LIB) $(NAME)
-$(NAME): $(OBJECTS)
+$(NAME): $(OBJECTS) $(HEADERS)
 	$(CC) $(CFLAGS) $(OBJECTS) $(LDFLAGS) $(LDLIBS) -o $@
 %.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@

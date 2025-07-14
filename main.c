@@ -5,10 +5,10 @@
 //la posicion 0 esta abajo y los numeros positivos ascienden)
 char* map[] = {
    "11111111 1111111 111111111111    ",
-   "11110111 1110101 101111010001    ",
-   "1100000111010101111101111000111  ",
+   "11110111 1110101 101111010101    ",
+   "1100000111010101111101110000111  ",
    "10000000000000001101010010001    ",
-   "10000000000000001100000010001    ",
+   "10000000000000001100000010011    ",
    "11000000110101011100000010001    ",
    "11110111111111011101010010001    ",
    "11110111111111011100000010001    ",
@@ -56,16 +56,14 @@ int init_world(t_world *world, t_data **data)
 		world->map = map;
 		world->char_position.y = 2.5; // 
 		world->char_position.x = 26.5;
-		world->char_direction.x = 0;
-		world->char_direction.y= 1;
+		world->char_direction.x = -1;
+		world->char_direction.y= 0;
 		calculate_camera_plane(world->char_direction.x, world->char_direction.y, &(world->plane_direction)); //perpendicular a char_direction
 		world->map_height = 14;
 		world->map_width = 33;
 		world->textures.wall_color = 0xd2C3D98; //rojo BORRAR es de prueba!!
 		//en caso de error llamar a free_data(*data, 5) talcual esta hardcodeado con valores de ejemplo, el error es imposible
 
-		world->step_rotation.x = sin(PLAYER_ROTATION_STEP);
-		world->step_rotation.y = cos(PLAYER_ROTATION_STEP);
 		world->key = 0;
 
 

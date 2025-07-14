@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/13 21:55:35 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/14 12:20:59 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,16 @@
 
 //Calcula el vector perpendicular a char_direction,
 //PLANE_MAGNITUDE = tan(FOV / 2) = tan(π/6) ≈ 0.577
-# define PLANE_MAGNITUDE 0.577
+# define PLANE_MAGNITUDE 1//0.577
 # define ERROR_MLX_INIT 1
 # define ERROR_MLX_NEW_WINDOW 2
 # define ERROR_MLX_NEW_IMAGE 3
 # define ERROR_MLX_GET_ADDR 4
 # define CLOSING_WINDOW 0
-# define WINDOW_WIDTH 800
-# define WINDOW_HEIGHT 800
+# define WINDOW_WIDTH 640
+# define WINDOW_HEIGHT 320
 # define MAX_RAY_DISTANCE 1e30
-# define PLAYER_ROTATION_STEP 0.06
+# define PLAYER_ROTATION_STEP 0.001// 1.570796327//90grados
 # define PLAYER_MOVE_STEP 0.1
 //Redefinimos macros de X.h con otro nombre, por ambiguedad en La Norma
 	// Eventos
@@ -108,13 +108,13 @@ typedef struct s_world
 	t_vector char_position;
 	t_vector char_direction;
 	t_vector plane_direction; //perpendicular a char_direction, para calcular el vector de vision
-	t_vector step_rotation; //vector de rotacion, calculado a partir de PLAYER_ROTATION_STEP
+	
 	t_data *data; //puntero a la estructura de datos de la ventana y la imagen
 }		t_world;
 
 //check_loock.c
 void check_loock(t_world *world);
-void rotate_vector(t_vector *vector, t_vector step_rotation, int direction);
+void rotate_vector(t_vector *vector, double sin, double cos);
 
 //main.c
 void	calculate_camera_plane(double char_dir_x, double char_dir_y, t_vector *plane_direction);
@@ -140,6 +140,8 @@ void calc_side_dist(t_ray *ray, t_vector *char_position, const t_vector *vector)
 //+++++++++++++++++++++++++++++++++++//
 // BORRAR ANTES DE ENTREGAR MOOKS    //
 //+++++++++++++++++++++++++++++++++++//
+#define DEBUGMODE 0 //1 para activar mensajes de debug, 0 para desactivarlos
+#define DEBUGMODE2 0
 #include <pthread.h>
 typedef struct s_map_data
 {
