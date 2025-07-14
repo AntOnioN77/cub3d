@@ -14,21 +14,7 @@
 
 
 
-void recalculate_vectors(t_vector *char_direction, t_vector *plane_camera, t_vector *screen_vectors)
-{
-	int	i;
-	double plane_portion;
-	//Recalcular screen_vectors para la nueva direccion del personaje
-	// POR HACER: Aqui entraria una buena optimizacion, comprobar si world->char_direction, ha cambiado desde la anterior llamada a esta funcion (con una variable estatica)
-	i = 0;
-	while(i < WINDOW_WIDTH)
-	{
-		plane_portion = i * 2.0 / WINDOW_WIDTH - 1.0; //de -1 a 1
-		screen_vectors[i].x = char_direction->x + plane_camera->x * plane_portion;
-		screen_vectors[i].y = char_direction->y + plane_camera->y * plane_portion;
-		i++;
-	}
-}
+
 
 
 //Funcion que toma las distancias de cada rayo y dibuja una columna roja de un tamaño proporcional
@@ -58,7 +44,7 @@ int	motor(t_world *world)
 	recalculate_vectors(&(world->char_direction),&(world->plane_direction), screen_vectors);
 
 	//Redibujar imagen
-	draw_image(world, screen_vectors);
+	draw_image(world);
 if(DEBUGMODE){sleep(2);}
 
 	mlx_put_image_to_window(data->mlx, data->window, data->img, 0, 0);
@@ -66,21 +52,18 @@ if(DEBUGMODE){sleep(2);}
 
 }
 
-void draw_image(t_world *world, t_vector screen_vectors[])
+void draw_image(t_world *world)
 {
 	int i;
 	double distances[WINDOW_WIDTH];
 	t_wall wall[WINDOW_WIDTH];
 
 	i = 0;
-
-	
 //	calculate_distances(world, screen_vectors, distances, wall);
 	while(i < WINDOW_WIDTH)
 	{
 if(DEBUGMODE){printf("-------------ray[%d]-----------\n", i);}
-if(DEBUGMODE){printf("screen_vectors[%d] == [%f, %f]\n", i, screen_vectors[i].x, screen_vectors[i].y);}
-		distances[i] = one_ray((const char**)world->map, &(world->char_position) , &(screen_vectors[i]), &(wall[i]), world);
+		distances[i] = one_ray((const char**)world->map, &(world->char_position), i, &(wall[i]), world);
 if(DEBUGMODE){printf("	distance[%d] == %f\n",i, distances[i]);}
 		i++;
 	}
@@ -135,14 +118,16 @@ void init_ray(t_vector *char_position, const t_vector *vector, t_ray *ray)
 }
 
 
-//OPTIMIZACION: en lugar de pasar t_vector, pasamos (t_vector *) un solo puntero
-// es mas economico que copiar una estructura con dos doubles
-double	one_ray(const char **map, t_vector *char_position, const t_vector *vector, t_wall *wall, t_world *world)
+double	one_ray(const char **map, t_vector *char_position, int i, t_wall *wall, t_world *world)
 {
 	t_ray ray;
+	t_vector vector;
+	double plane_portion;
 
-
-	init_ray(char_position, vector, &(ray));
+	plane_portion = i * 2.0 / WINDOW_WIDTH - 1.0; //de -1 a 1
+	vector.x = world->char_direction.x + world->plane_direction.x * plane_portion;
+	vector.y = world->char_direction.y + world->plane_direction.y * plane_portion;
+	init_ray(char_position, &vector, &(ray));
 if(DEBUGMODE){printf("side_dist_x:%f, side_dist_y:%f\n", ray.side_dist_x, ray.side_dist_y);}
 if(DEBUGMODE){printf("delta_dist_x:%f, delta_dist_y:%f\n", ray.delta_dist_x, ray.delta_dist_y);}
 	while(1)
@@ -153,37 +138,29 @@ if(DEBUGMODE){printf("map[%d][%d] ha explotado.\n", ray.tile_y, ray.tile_x);}
 			*wall = 7;
 			return 7470000.747;
 		}
-//printf("map[%d][%d] == %c.\n", ray.tile_y, ray.tile_x, map[ray.tile_y][ray.tile_x]);
 		if(map[ray.tile_y][ray.tile_x] == '1')
 		{
 			if(*wall == VERTICAL)
 			{
-if(DEBUGMODE){printf("ray.tile_x - char_position->x + (1 - ray.step_x) / 2) / vector->x \n %d - %f + (1 - %d) / 2) / %f\n", ray.tile_x, char_position->x, ray.step_x, vector->x);}
+if(DEBUGMODE){printf("ray.tile_x - char_position->x + (1 - ray.step_x) / 2) / vector->x \n %d - %f + (1 - %d) / 2) / %f\n", ray.tile_x, char_position->x, ray.step_x, vector.x);}
 if(DEBUGMODE){printf("     --VERTICAL--\n ray.step_y:%d, ray.tile_y:%d, ray.side_dist_y:%f\n", ray.step_y, ray.tile_y, ray.side_dist_y);}
-				return((ray.tile_x - char_position->x + (1 - ray.step_x) / 2) / vector->x);
+				return((ray.tile_x - char_position->x + (1 - ray.step_x) / 2) / vector.x);
 			}
 			if(*wall == HORIZONTAL)
 			{
-if(DEBUGMODE){printf("ray.tile_y - char_position->y + (1 - ray.step_y) / 2) / vector->y \n %d - %f + (1 - %d) / 2) / %f\n", ray.tile_y, char_position->y, ray.step_y, vector->y);}
+if(DEBUGMODE){printf("ray.tile_y - char_position->y + (1 - ray.step_y) / 2) / vector->y \n %d - %f + (1 - %d) / 2) / %f\n", ray.tile_y, char_position->y, ray.step_y, vector.y);}
 if(DEBUGMODE){printf("     --HORIZONTAL--\n ray.step_y:%d, ray.tile_y:%d, ray.side_dist_y:%f\n", ray.step_y, ray.tile_y, ray.side_dist_y);}
-
-				return((ray.tile_y - char_position->y + (1 - ray.step_y) / 2) / vector->y);
-
+				return((ray.tile_y - char_position->y + (1 - ray.step_y) / 2) / vector.y);
 			}
 		}
-		//incrementamos distancia alternativamente side_dist_x side_dist_y
 		if(ray.side_dist_x < ray.side_dist_y)
 		{
-//if(DEBUGMODE){printf("     ||VERTICAL||\nray.step_x:%d, ray.tile_x:%d, ray.side_dist_x:%f\n", ray.step_x, ray.tile_x, ray.side_dist_x);}
-
 			ray.side_dist_x += ray.delta_dist_x;
 			ray.tile_x += ray.step_x;
 			*wall = VERTICAL;
 		}
 		else
 		{
-//if(DEBUGMODE){printf("     --HORIZONTAL--\n ray.step_y:%d, ray.tile_y:%d, ray.side_dist_y:%f\n", ray.step_y, ray.tile_y, ray.side_dist_y);}
-
 			ray.side_dist_y += ray.delta_dist_y;
 			ray.tile_y += ray.step_y;
 			*wall = HORIZONTAL;
