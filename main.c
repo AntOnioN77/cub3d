@@ -69,7 +69,7 @@ int init_world(t_world *world, t_data *data)
 		calculate_camera_plane(world->char_direction.x, world->char_direction.y, &(world->plane_direction)); //perpendicular a char_direction
 		world->map_height = 14;
 		world->map_width = 33;
-		world->textures.wall_color = 0xd2C3D98; //BORRAR es de prueba!!
+		world->textures.wall_color = 0xd2C3D98;
 		world->key = 0;
 		return (0);
 }

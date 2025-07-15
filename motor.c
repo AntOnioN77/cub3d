@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:09:58 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/14 23:00:21 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/15 11:40:04 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,69 +62,6 @@ print_one_column(t_world *world, int column, double distance, t_wall wall)
 
 }
 
-// ray->side_dist_x:Cuanto falta hasta la proxima linea
-// ray->step_x:nos mobemos a delante(1) o acia detras(-1) en x
-void calc_side_dist(t_ray *ray, t_vector *char_position, const t_vector *vector)
-{
-	if (vector->x > 0)
-	{
-		ray->step_x = 1;
-		ray->side_dist_x = (ray->tile_x + 1.0 - char_position->x ) * ray->delta_dist_x; 
-	}
-	else
-	{
-		ray->step_x = -1;
-		ray->side_dist_x = (char_position->x - ray->tile_x) * ray->delta_dist_x; 
-	}
-	if (vector->y > 0)
-	{
-		ray->step_y = 1;
-		ray->side_dist_y = ( ray->tile_y  + 1.0 - char_position->y) * ray->delta_dist_y; 
-	}
-	else
-	{
-		ray->step_y = -1;
-		ray->side_dist_y = (char_position->y - ray->tile_y) * ray->delta_dist_y; 
-	}
-}
-
-
-void init_ray(t_vector *char_position, const t_vector *vector, t_ray *ray)
-{
-	//En que baldosa del mapa comienza el rayo (su valor se ira incrementando al lo largo del DDA):
-	ray->tile_x = (int)char_position->x;
-	ray->tile_y = (int)char_position->y;
-	//A lo largo del rayo, cual es la distancia entre dos lineas del mismo eje:
-	if (vector->x == 0.0)
-		ray->delta_dist_x = MAX_RAY_DISTANCE;
-	else
-		ray->delta_dist_x = fabs(1 / vector->x);
-	if (vector->y == 0.0)
-		ray->delta_dist_y = MAX_RAY_DISTANCE;
-	else
-		ray->delta_dist_y = fabs(1 / vector->y);
-	//Cuanto falta hasta la proxima linea ray->side_dist_ :
-	calc_side_dist(ray, char_position, vector);
-}
-
-void	set_wall_type(t_wall *wall, t_vector *vector)
-{
-	if (*wall == VERTICAL)
-	{
-		if (vector->x > 0)
-			*wall = EAST;
-		else
-			*wall = WEST;
-	}
-	else if (*wall == HORIZONTAL)
-	{
-		if (vector->y > 0)
-			*wall = NORTH;
-		else
-			*wall = SOUTH;
-	}
-}
-
 double	one_ray(int i, t_wall *wall, t_world *world)
 {
 	t_ray ray;
@@ -176,5 +113,67 @@ if(DEBUGMODE){printf("     --HORIZONTAL--\n ray.step_y:%d, ray.tile_y:%d, ray.si
 			ray.tile_y += ray.step_y;
 			*wall = HORIZONTAL;
 		}
+	}
+}
+
+void init_ray(t_vector *char_position, const t_vector *vector, t_ray *ray)
+{
+	//En que baldosa del mapa comienza el rayo (su valor se ira incrementando al lo largo del DDA):
+	ray->tile_x = (int)char_position->x;
+	ray->tile_y = (int)char_position->y;
+	//A lo largo del rayo, cual es la distancia entre dos lineas del mismo eje:
+	if (vector->x == 0.0)
+		ray->delta_dist_x = MAX_RAY_DISTANCE;
+	else
+		ray->delta_dist_x = fabs(1 / vector->x);
+	if (vector->y == 0.0)
+		ray->delta_dist_y = MAX_RAY_DISTANCE;
+	else
+		ray->delta_dist_y = fabs(1 / vector->y);
+	//Cuanto falta hasta la proxima linea ray->side_dist_ :
+	calc_side_dist(ray, char_position, vector);
+}
+
+// ray->side_dist_x:Cuanto falta hasta la proxima linea
+// ray->step_x:nos mobemos a delante(1) o acia detras(-1) en x
+void calc_side_dist(t_ray *ray, t_vector *char_position, const t_vector *vector)
+{
+	if (vector->x > 0)
+	{
+		ray->step_x = 1;
+		ray->side_dist_x = (ray->tile_x + 1.0 - char_position->x ) * ray->delta_dist_x; 
+	}
+	else
+	{
+		ray->step_x = -1;
+		ray->side_dist_x = (char_position->x - ray->tile_x) * ray->delta_dist_x; 
+	}
+	if (vector->y > 0)
+	{
+		ray->step_y = 1;
+		ray->side_dist_y = ( ray->tile_y  + 1.0 - char_position->y) * ray->delta_dist_y; 
+	}
+	else
+	{
+		ray->step_y = -1;
+		ray->side_dist_y = (char_position->y - ray->tile_y) * ray->delta_dist_y; 
+	}
+}
+
+void	set_wall_type(t_wall *wall, t_vector *vector)
+{
+	if (*wall == VERTICAL)
+	{
+		if (vector->x > 0)
+			*wall = EAST;
+		else
+			*wall = WEST;
+	}
+	else if (*wall == HORIZONTAL)
+	{
+		if (vector->y > 0)
+			*wall = NORTH;
+		else
+			*wall = SOUTH;
 	}
 }
