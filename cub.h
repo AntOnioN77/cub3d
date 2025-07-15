@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/14 21:55:47 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/15 11:43:01 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,11 @@ typedef struct s_ray
 {
 	int 	tile_x; //casilla actual durante el calculo (no es el origen)
 	int		tile_y;
-	double	side_dist_x;
+	double	side_dist_x;// Distancia al siguiente muro en x
 	double	side_dist_y;
-	double	delta_dist_x;
+	double	delta_dist_x; //distancia entre dos lineas del mismo eje
 	double	delta_dist_y;
-	int		step_x;
+	int		step_x; // +1 o -1, nos movemos hacia delante(1) o hacia detras(-1) en x
 	int		step_y;
 }	t_ray;
 

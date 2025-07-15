@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:09:58 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/15 11:40:04 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/15 11:44:43 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,15 +65,15 @@ print_one_column(t_world *world, int column, double distance, t_wall wall)
 double	one_ray(int i, t_wall *wall, t_world *world)
 {
 	t_ray ray;
-	t_vector vector;
+	t_vector char_dir;
 	double plane_portion;
 	const char **map = (const char **)world->map;
 	t_vector *char_position = &(world->char_position);
 
 	plane_portion = i * 2.0 / WINDOW_WIDTH - 1.0; //de -1 a 1
-	vector.x = world->char_direction.x + world->plane_direction.x * plane_portion;
-	vector.y = world->char_direction.y + world->plane_direction.y * plane_portion;
-	init_ray(char_position, &vector, &(ray));
+	char_dir.x = world->char_direction.x + world->plane_direction.x * plane_portion;
+	char_dir.y = world->char_direction.y + world->plane_direction.y * plane_portion;
+	init_ray(char_position, &char_dir, &(ray));
 if(DEBUGMODE){printf("side_dist_x:%f, side_dist_y:%f\n", ray.side_dist_x, ray.side_dist_y);}
 if(DEBUGMODE){printf("delta_dist_x:%f, delta_dist_y:%f\n", ray.delta_dist_x, ray.delta_dist_y);}
 	while(1)
@@ -88,17 +88,17 @@ if(DEBUGMODE){printf("map[%d][%d] ha explotado.\n", ray.tile_y, ray.tile_x);}
 		{
 			if(*wall == VERTICAL)
 			{
-if(DEBUGMODE){printf("ray.tile_x - char_position->x + (1 - ray.step_x) / 2) / vector->x \n %d - %f + (1 - %d) / 2) / %f\n", ray.tile_x, char_position->x, ray.step_x, vector.x);}
+if(DEBUGMODE){printf("ray.tile_x - char_position->x + (1 - ray.step_x) / 2) / vector->x \n %d - %f + (1 - %d) / 2) / %f\n", ray.tile_x, char_position->x, ray.step_x, char_dir.x);}
 if(DEBUGMODE){printf("     --VERTICAL--\n ray.step_y:%d, ray.tile_y:%d, ray.side_dist_y:%f\n", ray.step_y, ray.tile_y, ray.side_dist_y);}
-				set_wall_type(wall, &vector);
-				return((ray.tile_x - char_position->x + (1 - ray.step_x) / 2) / vector.x);
+				set_wall_type(wall, &char_dir);
+				return((ray.tile_x - char_position->x + (1 - ray.step_x) / 2) / char_dir.x);
 			}
 			if(*wall == HORIZONTAL)
 			{
-if(DEBUGMODE){printf("ray.tile_y - char_position->y + (1 - ray.step_y) / 2) / vector->y \n %d - %f + (1 - %d) / 2) / %f\n", ray.tile_y, char_position->y, ray.step_y, vector.y);}
+if(DEBUGMODE){printf("ray.tile_y - char_position->y + (1 - ray.step_y) / 2) / vector->y \n %d - %f + (1 - %d) / 2) / %f\n", ray.tile_y, char_position->y, ray.step_y, char_dir.y);}
 if(DEBUGMODE){printf("     --HORIZONTAL--\n ray.step_y:%d, ray.tile_y:%d, ray.side_dist_y:%f\n", ray.step_y, ray.tile_y, ray.side_dist_y);}
-				set_wall_type(wall, &vector);
-				return((ray.tile_y - char_position->y + (1 - ray.step_y) / 2) / vector.y);
+				set_wall_type(wall, &char_dir);
+				return((ray.tile_y - char_position->y + (1 - ray.step_y) / 2) / char_dir.y);
 			}
 		}
 		if(ray.side_dist_x < ray.side_dist_y)
