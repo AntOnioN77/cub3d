@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:09:58 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/15 11:44:43 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/15 21:19:49 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,14 +91,16 @@ if(DEBUGMODE){printf("map[%d][%d] ha explotado.\n", ray.tile_y, ray.tile_x);}
 if(DEBUGMODE){printf("ray.tile_x - char_position->x + (1 - ray.step_x) / 2) / vector->x \n %d - %f + (1 - %d) / 2) / %f\n", ray.tile_x, char_position->x, ray.step_x, char_dir.x);}
 if(DEBUGMODE){printf("     --VERTICAL--\n ray.step_y:%d, ray.tile_y:%d, ray.side_dist_y:%f\n", ray.step_y, ray.tile_y, ray.side_dist_y);}
 				set_wall_type(wall, &char_dir);
-				return((ray.tile_x - char_position->x + (1 - ray.step_x) / 2) / char_dir.x);
+				return(ray.side_dist_x - ray.delta_dist_x);
+				//return((ray.tile_x - char_position->x + (1 - ray.step_x) / 2) / char_dir.x);
 			}
 			if(*wall == HORIZONTAL)
 			{
 if(DEBUGMODE){printf("ray.tile_y - char_position->y + (1 - ray.step_y) / 2) / vector->y \n %d - %f + (1 - %d) / 2) / %f\n", ray.tile_y, char_position->y, ray.step_y, char_dir.y);}
 if(DEBUGMODE){printf("     --HORIZONTAL--\n ray.step_y:%d, ray.tile_y:%d, ray.side_dist_y:%f\n", ray.step_y, ray.tile_y, ray.side_dist_y);}
 				set_wall_type(wall, &char_dir);
-				return((ray.tile_y - char_position->y + (1 - ray.step_y) / 2) / char_dir.y);
+				return(ray.side_dist_y - ray.delta_dist_y);//así lo resulve lode, VERIFICA QUE FUNCIONA!!, deberia absorver el ojo de pez
+				//return((ray.tile_y - char_position->y + (1 - ray.step_y) / 2) / char_dir.y);
 			}
 		}
 		if(ray.side_dist_x < ray.side_dist_y)
