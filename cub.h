@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/16 14:33:16 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/16 14:56:40 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef enum e_wall
 	//ignora estos:
 	VERTICAL,
 	HORIZONTAL,
+	ERROR
 } t_wall;
 
 typedef struct s_vector

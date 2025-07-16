@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:09:58 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/16 14:47:31 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/16 14:59:12 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,11 @@ void draw_image(t_world *world)
 		distance = one_ray(i, &(wall), world);
 //*****************************************************************************************/		
 		if(wall == NORTH || wall == SOUTH)
-		{
 			impact_on_wall = world->char_position.x + (distance * world->char_direction.x);
-		}
 		else if(wall == WEST || wall == EAST)
 			impact_on_wall = world->char_position.y + (distance * world->char_direction.y);
+		else
+			perror("Error: one_ray maybe shot to infinite.\n");
 		impact_on_wall = (impact_on_wall - (int)impact_on_wall) * (TEXTURE_WIDTH - 1); //de 0 a 63
 //*****************************************************************************************/
 		print_one_column(world, i, distance, wall);
@@ -91,7 +91,7 @@ if(DEBUGMODE){printf("delta_dist_x:%f, delta_dist_y:%f\n", ray.delta_dist_x, ray
 		if(ray.tile_x < 0 || ray.tile_y < 0 || ray.tile_x >= (world->map_width) || ray.tile_y >= (world->map_height))
 		{
 if(DEBUGMODE){printf("map[%d][%d] ha explotado.\n", ray.tile_y, ray.tile_x);}
-			*wall = 7;
+			*wall = ERROR;
 			return 7470000.747;//error
 		}
 		if(map[ray.tile_y][ray.tile_x] == '1')
