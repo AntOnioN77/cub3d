@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/15 11:43:01 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/16 14:33:16 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@
 # define PLAYER_ROTATION_STEP 0.001//
 # define PLAYER_MOVE_STEP 0.1
 # define M_PI 3.14159265358979323846 //Pi por algun motivo no se carga desde math.h
+# define TEXTURE_WIDTH 64
+# define TEXTURE_HEIGHT 64
 
 //Redefinimos macros de X.h con otro nombre, por ambiguedad en La Norma
 	// Eventos

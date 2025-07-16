@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:09:58 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/15 21:19:49 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/16 14:34:30 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,22 @@ void draw_image(t_world *world)
 {
 	int i;
 	double distance;
+	double impact_on_wall;
 	t_wall wall;
 
 	i = 0;
 	while(i < WINDOW_WIDTH)
 	{
 		distance = one_ray(i, &(wall), world);
+//*****************************************************************************************/		
+		if(wall == NORTH || wall == SOUTH)
+		{
+			impact_on_wall = world->char_position.x + (distance * world->char_direction.x);
+		}
+		else if(wall == WEST || wall == EAST)
+			impact_on_wall = world->char_position.y + (distance * world->char_direction.y);
+		impact_on_wall = (impact_on_wall - (int)impact_on_wall) * TEXTURE_WIDTH; //de 0 a 64
+//*****************************************************************************************/
 		print_one_column(world, i, distance, wall);
 		i++;
 	}
