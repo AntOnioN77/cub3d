@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:09:58 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/17 17:13:34 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/17 23:26:26 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,17 @@ int	motor(t_world *world)
 	//Poner la imagen en la ventana
 	mlx_put_image_to_window(data->mlx, data->window, data->img, 0, 0);
 	return (1);
+}
+
+// PENDIENTE!!
+void	print_one_column(t_world *world, int i, double distance, t_wall wall, double impact_on_wall)
+{
+	// MOOCK Evitamos errores de compilacion.
+	(void)world;
+    (void)i;
+    (void)distance;
+    (void)wall;
+    (void)impact_on_wall;
 }
 
 void	draw_image(t_world *world)
@@ -117,6 +128,8 @@ double	hit_on_wall(t_ray *ray, t_world *world, t_wall *wall,
 				world, ray->side_dist_y - ray->delta_dist_y);
 		return (ray->side_dist_y - ray->delta_dist_y);
 	}
+	perror("Error: hit_on_wall called with wall != VERTICAL or HORIZONTAL.\n");
+	return (7470000.747);
 }
 
 void	 init_ray(t_vector *char_position, const t_vector *vector, t_ray *ray)
