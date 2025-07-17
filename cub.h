@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/16 14:56:40 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/17 12:03:45 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct s_data
 
 typedef struct s_ray
 {
+	t_vector ray_dir;
 	int 	tile_x; //casilla actual durante el calculo (no es el origen)
 	int		tile_y;
 	double	side_dist_x;// Distancia al siguiente muro en x
@@ -130,7 +131,7 @@ int		init_data(t_data **data);
 
 //render.c
 int		motor(t_world *world);
-double	one_ray(int i, t_wall *wall, t_world *world);
+double	one_ray(int i, t_wall *wall, t_world *world, double *impact_on_wall);
 void	draw_image(t_world *world);
 void	init_ray(t_vector *char_position, const t_vector *vector, t_ray *ray);
 void	calculate_distances(t_world *world, const t_vector vectors[], double distances[], t_wall *wall);

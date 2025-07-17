@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:09:58 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/16 16:57:42 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/17 12:12:44 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,61 +62,60 @@ double calculate_impact_on_wall(t_vector *ray_dir, t_wall wall, t_world *world, 
 
 }
 
-double	one_ray(int i, t_wall *wall, t_world *world, double *impact_on_wall) //demasiados parametros, a ver que struct monto, para que quede limpio y eficiente
+void go_further(t_ray *ray, t_wall *wall)
+{
+	if(ray->side_dist_x < ray->side_dist_y)
+	{
+		ray->side_dist_x += ray->delta_dist_x;
+		ray->tile_x += ray->step_x;
+		*wall = VERTICAL;
+	}
+	else
+	{
+		ray->side_dist_y += ray->delta_dist_y;
+		ray->tile_y += ray->step_y;
+		*wall = HORIZONTAL;
+	}
+}
+
+double	one_ray(int i, t_wall *wall, t_world *world, double *impact_on_wall)
 {
 	t_ray ray;
-	t_vector ray_dir;
+	
 	double plane_portion;
 	const char **map = (const char **)world->map;
-	t_vector *char_position = &(world->char_position);
-
 	plane_portion = i * 2.0 / WINDOW_WIDTH - 1.0; //de -1 a 1
-	ray_dir.x = world->char_direction.x + world->plane_direction.x * plane_portion;
-	ray_dir.y = world->char_direction.y + world->plane_direction.y * plane_portion;
-	init_ray(char_position, &ray_dir, &(ray));
-if(DEBUGMODE){printf("side_dist_x:%f, side_dist_y:%f\n", ray.side_dist_x, ray.side_dist_y);}
-if(DEBUGMODE){printf("delta_dist_x:%f, delta_dist_y:%f\n", ray.delta_dist_x, ray.delta_dist_y);}
+	ray.ray_dir.x = world->char_direction.x + world->plane_direction.x * plane_portion;
+	ray.ray_dir.y = world->char_direction.y + world->plane_direction.y * plane_portion;
+	init_ray(&(world->char_position), &(ray.ray_dir), &(ray));
 	while(1)
 	{
 		if(ray.tile_x < 0 || ray.tile_y < 0 || ray.tile_x >= (world->map_width) || ray.tile_y >= (world->map_height))
 		{
-if(DEBUGMODE){printf("map[%d][%d] ha explotado.\n", ray.tile_y, ray.tile_x);}
 			*wall = ERROR;
 			return 7470000.747;//error
 		}
 		if(map[ray.tile_y][ray.tile_x] == '1')
-		{
-			if(*wall == VERTICAL)
-			{
-if(DEBUGMODE){printf("ray.tile_x - char_position->x + (1 - ray.step_x) / 2) / vector->x \n %d - %f + (1 - %d) / 2) / %f\n", ray.tile_x, char_position->x, ray.step_x, ray_dir.x);}
-if(DEBUGMODE){printf("     --VERTICAL--\n ray.step_y:%d, ray.tile_y:%d, ray.side_dist_y:%f\n", ray.step_y, ray.tile_y, ray.side_dist_y);}
-				set_wall_type(wall, &ray_dir);
-				*impact_on_wall = calculate_impact_on_wall(&ray_dir, *wall, world, ray.side_dist_x - ray.delta_dist_x);// NO HACER LA RESTA DOS VECES. prueba
-				return(ray.side_dist_x - ray.delta_dist_x);
-				//return((ray.tile_x - char_position->x + (1 - ray.step_x) / 2) / char_dir.x);
-			}
-			if(*wall == HORIZONTAL)
-			{
-if(DEBUGMODE){printf("ray.tile_y - char_position->y + (1 - ray.step_y) / 2) / vector->y \n %d - %f + (1 - %d) / 2) / %f\n", ray.tile_y, char_position->y, ray.step_y, ray_dir.y);}
-if(DEBUGMODE){printf("     --HORIZONTAL--\n ray.step_y:%d, ray.tile_y:%d, ray.side_dist_y:%f\n", ray.step_y, ray.tile_y, ray.side_dist_y);}
-				set_wall_type(wall, &ray_dir);
-				*impact_on_wall = calculate_impact_on_wall(&ray_dir, *wall, world, ray.side_dist_y - ray.delta_dist_y);
-				return(ray.side_dist_y - ray.delta_dist_y);//así lo resulve lode, VERIFICA QUE FUNCIONA!!, deberia absorver el ojo de pez
-				//return((ray.tile_y - char_position->y + (1 - ray.step_y) / 2) / char_dir.y);
-			}
-		}
-		if(ray.side_dist_x < ray.side_dist_y)
-		{
-			ray.side_dist_x += ray.delta_dist_x;
-			ray.tile_x += ray.step_x;
-			*wall = VERTICAL;
-		}
-		else
-		{
-			ray.side_dist_y += ray.delta_dist_y;
-			ray.tile_y += ray.step_y;
-			*wall = HORIZONTAL;
-		}
+			return (hit_on_wall(&ray, world, wall, impact_on_wall));
+		go_further(&ray, wall);
+	}
+}
+
+double hit_on_wall(t_ray *ray, t_world *world, t_wall *wall, double *impact_on_wall)
+{
+	if(*wall == VERTICAL)
+	{
+		set_wall_type(wall, &ray->ray_dir);
+		*impact_on_wall = calculate_impact_on_wall(&ray->ray_dir, *wall, world, ray->side_dist_x - ray->delta_dist_x);// NO HACER LA RESTA DOS VECES. prueba
+		return(ray->side_dist_x - ray->delta_dist_x);
+		//return((ray.tile_x - char_position->x + (1 - ray.step_x) / 2) / char_dir.x);
+	}
+	if(*wall == HORIZONTAL)
+	{
+		set_wall_type(wall, &ray->ray_dir);
+		*impact_on_wall = calculate_impact_on_wall(&ray->ray_dir, *wall, world, ray->side_dist_y - ray->delta_dist_y);
+		return(ray->side_dist_y - ray->delta_dist_y);//así lo resulve lode, VERIFICA QUE FUNCIONA!!, deberia absorver el ojo de pez
+		//return((ray.tile_y - char_position->y + (1 - ray.step_y) / 2) / char_dir.y);
 	}
 }
 
