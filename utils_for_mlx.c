@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 16:59:20 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/14 21:17:14 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/17 17:14:17 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	ft_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int *)pixel = color;
 }
 
-
 int	press_key(int keycode, t_world *world)
 {
 	if (keycode == 65307)
@@ -35,11 +34,10 @@ int	press_key(int keycode, t_world *world)
 	return (0);
 }
 
-int release_key(int keycode, t_world *world)
+int	release_key(int keycode, t_world *world)
 {
-	if(world->key == keycode)
+	if (world->key == keycode)
 		world->key = 0;
-
 	return (0);
 }
 
@@ -70,8 +68,6 @@ int	free_data(t_data **data, int error_code)
 int	close_win(t_world *world)
 {
 	free_data(&(world->data), CLOSING_WINDOW);
-	//free_map(world->map);
-	
 	exit(EXIT_SUCCESS);
 }
 
