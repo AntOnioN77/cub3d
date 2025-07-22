@@ -13,10 +13,14 @@
 #ifndef CUB_H
 # define CUB_H
 
-# include "minilibx-linux/mlx.h"
+# include "../minilibx-linux/mlx.h"
 # include <math.h>
-# include "libft/libft.h"
+# include "../libft/libft.h"
+# include "../get_next_line/get_next_line.h"
 # include <stdio.h>
+# include <stdbool.h> // Para valores booleanos
+# include <fcntl.h> // Para apertura de archivos (texturas)
+# include <errno.h> // Para mensajes de error
 
 //Codigos de error para MLX
 # define ERROR_MLX_INIT 1
@@ -30,11 +34,16 @@
 # define WINDOW_WIDTH 640
 # define WINDOW_HEIGHT 480
 # define MAX_RAY_DISTANCE 1e30
-# define ROT_STEP 0.001//
-# define MOVE_STEP 0.1
+# define ROT_STEP 0.01
+# define ROT_SIN 0.009999833334166664   // sin(0.01)
+# define ROT_COS 0.9999500004166653     // cos(0.01)
+# define MOVE_STEP 0.01
 # define M_PI 3.14159265358979323846 //Pi por algun motivo no se carga desde math.h
 # define TEXTURE_WIDTH 64
 # define TEXTURE_HEIGHT 64
+
+//Definición de macro de error para el parseo:
+# define ERR_PREFIX "Error\n"
 
 //Redefinimos macros de X.h con otro nombre, por ambiguedad en La Norma
 	// Eventos
@@ -89,16 +98,51 @@ typedef struct s_ray
 	int			step_y;
 }	t_ray;
 
+// Configuración para el parseo
+typedef struct s_config
+{
+	char	*tex_no;
+	char	*tex_so;
+	char	*tex_we;
+	char	*tex_ea;
+	int		floor_color;
+	int		ceil_color;
+	char	**map;
+}				t_config;
+
 typedef struct s_textures
 {
-	int		wall_color; //BORRAR es de prueba!!
-	int		floor_color;
-	int		ceiling_color;
 	char	*no_texture;
 	char	*so_texture;
 	char	*we_texture;
 	char	*ea_texture;
+	int		ceiling_color;
+	int		floor_color;
+	void	*no_img;
+	void	*so_img;
+	void	*we_img;
+	void	*ea_img;
+	char	*no_addr;
+	char	*so_addr;
+	char	*we_addr;
+	char	*ea_addr;
+	int		width;
+	int		height;
+	int		bpp;
+	int		line_length;
+	int		endian;
 }	t_textures;
+
+// Para poder dibujar las texturas
+typedef struct s_draw_info
+{
+    t_data      *data;
+    t_textures  *tex;
+    char        *tex_addr;
+    int         tex_x;
+    int         line_h;
+    int         i;
+}	t_draw_info;
 
 typedef struct s_world
 {
@@ -111,15 +155,17 @@ typedef struct s_world
 	t_vector	char_position;
 	t_vector	char_direction;
 	t_vector	plane_direction; //perpendicular a char_direction, para calcular el vector de vision
+	bool    key_down[256]; // Para poder movernos en varias direcciones a la vez
 }		t_world;
 
 //char_movement.c
+
 void	char_movement(t_world *world);
-void	rotate_vector(t_vector *vector, double sin, double cos);
+void	rotate_vector(t_vector *vector, double sinv, double cosv);
 
 //main.c
 void	calculate_camera_plane(double char_dir_x, double char_dir_y, t_vector *plane_direction);
-int		init_world(t_world *world, t_data *data);
+int		init_world(t_world *world, t_data *data, t_config *cfg);
 
 //utils_for_mlx.c
 void	ft_pixel_put(t_data *data, int x, int y, int color);
@@ -145,6 +191,17 @@ void	init_ray(t_vector *char_position, const t_vector *vector, t_ray *ray);
 void	calculate_distances(t_world *world, const t_vector vectors[], double distances[], t_wall *wall);
 void	print_columns(double distances[], t_data *data, t_textures textures);
 void	calc_side_dist(t_ray *ray, t_vector *char_position, const t_vector *vector);
+
+//map_check.c
+void	error_exit(const char *msg);
+char	**collect_map(int fd);
+void	parse_file(const char *path, t_config *cfg);
+char	**ft_strarr_append(char **arr, const char *new_str);
+void	check_extension(const char *file);
+
+//column_printing.c
+void	print_one_column(t_world *world, int i, double distance, t_wall wall, double impact);
+
 
 //+++++++++++++++++++++++++++++++++++//
 // BORRAR ANTES DE ENTREGAR MOOKS    //

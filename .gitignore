@@ -2,3 +2,5 @@ MLX42
 *.o
 cub3D
 out
+bin/
+.vscode/settings.json
