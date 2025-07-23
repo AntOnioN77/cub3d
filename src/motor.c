@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:09:58 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/23 23:12:28 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/23 23:22:03 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	draw_image(t_world *world)
 	}
 }
 
-double	calculate_impact_on_wall(t_vector *ray_dir, t_wall wall,
+double	calc_impact_on_wall(t_vector *ray_dir, t_wall wall,
 	t_world *world, double distance)
 {
 	double	impact_on_wall;
@@ -138,7 +138,7 @@ double	one_ray(int i, t_wall *wall, t_world *world, double *impact_on_wall)
 	}
 }
 
-double hit_on_wall(t_ray *ray, t_world *world, t_wall *wall, double *impact_on_wall)
+double hit_on_wall(t_ray *ray, t_world *world, t_wall *wall, double *impact_on)
 {
 	double distance;
 	
@@ -149,7 +149,7 @@ double hit_on_wall(t_ray *ray, t_world *world, t_wall *wall, double *impact_on_w
 			*wall = EAST;
 		else
 			*wall = WEST;
-		*impact_on_wall = calculate_impact_on_wall(&ray->ray_dir, *wall, world, distance);
+		*impact_on = calc_impact_on_wall(&ray->ray_dir, *wall, world, distance);
 		return (distance);
 	}
 	else if (*wall == HORIZONTAL)
@@ -159,7 +159,7 @@ double hit_on_wall(t_ray *ray, t_world *world, t_wall *wall, double *impact_on_w
 			*wall = NORTH;
 		else
 			*wall = SOUTH;
-		*impact_on_wall = calculate_impact_on_wall(&ray->ray_dir, *wall, world, distance);
+		*impact_on = calc_impact_on_wall(&ray->ray_dir, *wall, world, distance);
 		return (distance);
 	}
 	else
@@ -220,7 +220,7 @@ void	calc_side_dist(t_ray *ray, t_vector *char_position,
 	if (vector->x > 0)
 	{
 		ray->step_x = 1;
-		ray->side_dist_x = (ray->tile_x + 1.0 - char_position->x )
+		ray->side_dist_x = (ray->tile_x + 1.0 - char_position->x)
 			* ray->delta_dist_x;
 	}
 	else

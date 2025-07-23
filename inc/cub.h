@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/23 16:28:26 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/23 23:17:52 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ int		init_data(t_data **data);
 //motor.c
 double	hit_on_wall(t_ray *ray, t_world *world, t_wall *wall,
 			double *impact_on_wall);
-double	calculate_impact_on_wall(t_vector *ray_dir, t_wall wall,
+double	calc_impact_on_wall(t_vector *ray_dir, t_wall wall,
 			t_world *world, double distance);
 void	go_further(t_ray *ray, t_wall *wall);
 void	set_wall_type(t_wall *wall, t_vector *vector);
