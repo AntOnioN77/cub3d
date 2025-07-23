@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:09:58 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/23 16:00:09 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/23 23:12:28 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,35 @@ double	one_ray(int i, t_wall *wall, t_world *world, double *impact_on_wall)
 double hit_on_wall(t_ray *ray, t_world *world, t_wall *wall, double *impact_on_wall)
 {
 	double distance;
+	
+	if (*wall == VERTICAL)
+	{
+		distance = ray->side_dist_x - ray->delta_dist_x;
+		if (ray->ray_dir.x > 0)
+			*wall = EAST;
+		else
+			*wall = WEST;
+		*impact_on_wall = calculate_impact_on_wall(&ray->ray_dir, *wall, world, distance);
+		return (distance);
+	}
+	else if (*wall == HORIZONTAL)
+	{
+		distance = ray->side_dist_y - ray->delta_dist_y;
+		if (ray->ray_dir.y > 0)
+			*wall = NORTH;
+		else
+			*wall = SOUTH;
+		*impact_on_wall = calculate_impact_on_wall(&ray->ray_dir, *wall, world, distance);
+		return (distance);
+	}
+	else
+		exit(1);
+}
+
+/*
+double hit_on_wall(t_ray *ray, t_world *world, t_wall *wall, double *impact_on_wall)
+{
+	double distance;
 
 	if (*wall == VERTICAL)
 	{
@@ -162,6 +191,7 @@ double hit_on_wall(t_ray *ray, t_world *world, t_wall *wall, double *impact_on_w
 		exit(1);
 	}
 }
+*/
 
 
 void	 init_ray(t_vector *char_position, const t_vector *vector, t_ray *ray)
