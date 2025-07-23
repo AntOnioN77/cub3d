@@ -10,8 +10,43 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../inc/cub.h"
 
+/*
+ * Rellena todo el fondo de la imagen con suelo y cielo.
+ */
+static void	clear_background(t_world *world)
+{
+	int		x;
+	int		y;
+	t_data	*data;
+
+	data = world->data;
+	/* Techo: desde y = 0 hasta la mitad */
+	y = 0;
+	while (y < WINDOW_HEIGHT / 2)
+	{
+		x = 0;
+		while (x < WINDOW_WIDTH)
+		{
+			ft_pixel_put(data, x, y, world->textures.ceiling_color);
+			x++;
+		}
+		y++;
+	}
+	/* Suelo: desde la mitad hasta WINDOW_HEIGHT */
+	y = WINDOW_HEIGHT / 2;
+	while (y < WINDOW_HEIGHT)
+	{
+		x = 0;
+		while (x < WINDOW_WIDTH)
+		{
+			ft_pixel_put(data, x, y, world->textures.floor_color);
+			x++;
+		}
+		y++;
+	}
+}
 //LLamada iterativamente por mlx_loop_hook() debe actualizar la imagen y
 // empujarla a la ventana 
 int	motor(t_world *world)
@@ -27,17 +62,6 @@ int	motor(t_world *world)
 	return (1);
 }
 
-// PENDIENTE!!
-void	print_one_column(t_world *world, int i, double distance, t_wall wall, double impact_on_wall)
-{
-	// MOOCK Evitamos errores de compilacion.
-	(void)world;
-    (void)i;
-    (void)distance;
-    (void)wall;
-    (void)impact_on_wall;
-}
-
 void	draw_image(t_world *world)
 {
 	int		i;
@@ -45,6 +69,7 @@ void	draw_image(t_world *world)
 	double	impact_on_wall;
 	t_wall	wall;
 
+	clear_background(world);
 	i = 0;
 	while (i < WINDOW_WIDTH)
 	{
@@ -106,31 +131,38 @@ double	one_ray(int i, t_wall *wall, t_world *world, double *impact_on_wall)
 			return (7470000.747);
 		}
 		if (map[ray.tile_y][ray.tile_x] == '1')
+		{
 			return (hit_on_wall(&ray, world, wall, impact_on_wall));
+		}
 		go_further(&ray, wall);
 	}
 }
 
-double	hit_on_wall(t_ray *ray, t_world *world, t_wall *wall,
-	double *impact_on_wall)
+double hit_on_wall(t_ray *ray, t_world *world, t_wall *wall, double *impact_on_wall)
 {
+	double distance;
+
 	if (*wall == VERTICAL)
 	{
-		set_wall_type(wall, &ray->ray_dir);
-		*impact_on_wall = calculate_impact_on_wall(&ray->ray_dir, *wall, world,
-				ray->side_dist_x - ray->delta_dist_x);
-		return (ray->side_dist_x - ray->delta_dist_x);
+		distance = ray->side_dist_x - ray->delta_dist_x;
+		*wall = (ray->ray_dir.x > 0) ? EAST : WEST;
+		*impact_on_wall = calculate_impact_on_wall(&ray->ray_dir, *wall, world, distance);
+		return (distance);
 	}
-	if (*wall == HORIZONTAL)
+	else if (*wall == HORIZONTAL)
 	{
-		set_wall_type(wall, &ray->ray_dir);
-		*impact_on_wall = calculate_impact_on_wall(&ray->ray_dir, *wall,
-				world, ray->side_dist_y - ray->delta_dist_y);
-		return (ray->side_dist_y - ray->delta_dist_y);
+		distance = ray->side_dist_y - ray->delta_dist_y;
+		*wall = (ray->ray_dir.y > 0) ? NORTH : SOUTH;
+		*impact_on_wall = calculate_impact_on_wall(&ray->ray_dir, *wall, world, distance);
+		return (distance);
 	}
-	perror("Error: hit_on_wall called with wall != VERTICAL or HORIZONTAL.\n");
-	return (7470000.747);
+	else
+	{
+		perror("Error: hit_on_wall called with invalid wall type\n");
+		exit(1);
+	}
 }
+
 
 void	 init_ray(t_vector *char_position, const t_vector *vector, t_ray *ray)
 {
@@ -178,23 +210,5 @@ void	calc_side_dist(t_ray *ray, t_vector *char_position,
 		ray->step_y = -1;
 		ray->side_dist_y = (char_position->y - ray->tile_y)
 			* ray->delta_dist_y;
-	}
-}
-
-void	set_wall_type(t_wall *wall, t_vector *vector)
-{
-	if (*wall == VERTICAL)
-	{
-		if (vector->x > 0)
-			*wall = EAST;
-		else
-			*wall = WEST;
-	}
-	else if (*wall == HORIZONTAL)
-	{
-		if (vector->y > 0)
-			*wall = NORTH;
-		else
-			*wall = SOUTH;
 	}
 }

@@ -10,44 +10,46 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../inc/cub.h"
 
-void	rotate_normalize_vector(t_vector *vector, double sin, double cos);
-
-void	char_movement(t_world *world)
+void    char_movement(t_world *world)
 {
-	if (world->key == 'd')
+	/* Giro a la derecha */
+	if (world->key_down['d'])
 	{
-		rotate_normalize_vector(&(world->char_direction), sin(ROT_STEP),
-			cos(ROT_STEP));
-		rotate_vector(&(world->plane_direction), sin(ROT_STEP), cos(ROT_STEP));
+		rotate_vector(&world->char_direction, ROT_SIN, ROT_COS);
+		rotate_vector(&world->plane_direction, ROT_SIN, ROT_COS);
 	}
-	else if (world->key == 'a')
+	/* Giro a la izquierda */
+	if (world->key_down['a'])
 	{
+		/* rota con -ROT_STEP */
+		rotate_vector(&world->char_direction, -ROT_SIN, ROT_COS);
+		rotate_vector(&world->plane_direction, -ROT_SIN, ROT_COS);
 	}
-	else if (world->key == 'w')
+	/* Avanzar */
+	if (world->key_down['w'])
 	{
-		// Avanzar en la direccion del personaje
 		world->char_position.x += world->char_direction.x * MOVE_STEP;
 		world->char_position.y += world->char_direction.y * MOVE_STEP;
 	}
-	else if (world->key == 's')
+	/* Retroceder */
+	if (world->key_down['s'])
 	{
-		// Retroceder en la direccion opuesta del personaje
 		world->char_position.x -= world->char_direction.x * MOVE_STEP;
 		world->char_position.y -= world->char_direction.y * MOVE_STEP;
 	}
 }
 
-void	rotate_vector(t_vector *vector, double sin, double cos)
+void	rotate_vector(t_vector *v, double sinv, double cosv)
 {
-	double	result_x;
-	double	result_y;
+	double	nx;
+	double	ny;
 
-	result_x = vector->x * cos - vector->y * sin;
-	result_y = vector->x * sin + vector->y * cos;
-	vector->x = result_x;
-	vector->y = result_y;
+	nx = v->x * cosv - v->y * sinv;
+	ny = v->x * sinv + v->y * cosv;
+	v->x = nx;
+	v->y = ny;
 }
 
 /*esta es la formula para rotar en sentido horario un vector

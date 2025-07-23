@@ -4,7 +4,12 @@
 		"mlx_int.h": "c",
 		"stdlib.h": "c",
 		"string.h": "c",
-		"libft.h": "c"
+		"libft.h": "c",
+		"chrono": "c",
+		"algorithm": "c",
+		"get_next_line.h": "c",
+		"mlx.h": "c",
+		"cub.h": "c"
 	},
 	"makefile.configureOnOpen": false
 }

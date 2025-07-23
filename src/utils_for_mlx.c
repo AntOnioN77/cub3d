@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "../inc/cub.h"
 
 void	ft_pixel_put(t_data *data, int x, int y, int color)
 {
@@ -24,20 +24,16 @@ void	ft_pixel_put(t_data *data, int x, int y, int color)
 int	press_key(int keycode, t_world *world)
 {
 	if (keycode == 65307)
-	{
 		close_win(world);
-	}
-	else
-	{
-		world->key = keycode;
-	}
+	else if (keycode >= 0 && keycode < 256)
+		world->key_down[keycode] = true;
 	return (0);
 }
 
 int	release_key(int keycode, t_world *world)
 {
-	if (world->key == keycode)
-		world->key = 0;
+	if (keycode >= 0 && keycode < 256)
+		world->key_down[keycode] = false;
 	return (0);
 }
 
