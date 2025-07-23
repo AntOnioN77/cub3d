@@ -63,6 +63,7 @@ static int	init_world_player(t_world *world)
 					world->char_direction = (t_vector){-1, 0};
 				calculate_camera_plane(world->char_direction.x,
 					world->char_direction.y, &world->plane_direction);
+				world->map[i][j] = '0';//Antonio 23-7-12:38
 				return (0);
 			}
 			j++;
@@ -126,6 +127,7 @@ int main(int argc, char **argv)
     init_world(&world, data, &config);
     /* 4) Cargar texturas e iniciamos array de teclas*/
 	load_textures(&world);
+	i = 0; //Antonio 23-7-12:38
 	while (i < 256)
 		world.key_down[i++] = false;
     /* 6) Hooks y bucle principal */

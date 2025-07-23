@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:50:51 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/17 16:57:50 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/23 15:57:51 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 
 void    char_movement(t_world *world)
 {
+	double	new_position_x;
+	double	new_position_y;
+
+	new_position_x = world->char_position.x;
+	new_position_y = world->char_position.y;
 	/* Giro a la derecha */
 	if (world->key_down['d'])
 	{
@@ -30,15 +35,36 @@ void    char_movement(t_world *world)
 	/* Avanzar */
 	if (world->key_down['w'])
 	{
-		world->char_position.x += world->char_direction.x * MOVE_STEP;
-		world->char_position.y += world->char_direction.y * MOVE_STEP;
+		new_position_x = world->char_position.x + world->char_direction.x * MOVE_STEP;
+		new_position_y = world->char_position.y + world->char_direction.y * MOVE_STEP;
 	}
 	/* Retroceder */
 	if (world->key_down['s'])
 	{
-		world->char_position.x -= world->char_direction.x * MOVE_STEP;
-		world->char_position.y -= world->char_direction.y * MOVE_STEP;
+		new_position_x = world->char_position.x - world->char_direction.x * MOVE_STEP;
+		new_position_y = world->char_position.y - world->char_direction.y * MOVE_STEP;
 	}
+	if ((int)new_position_y < (world->map_height) && (int)new_position_x < (world->map_width) //puede ser innecesario
+		&& new_position_y >= 0 && new_position_x >= 0)
+	{
+		if(world->map[(int)(new_position_y)][(int)(new_position_x)] == '0')
+		{
+			world->char_position.x = new_position_x;
+			world->char_position.y = new_position_y;
+		}
+
+	/*
+		if((world->char_position.x > new_position_x && world->map[(int)(new_position_y)][(int)(new_position_x + 0.05)] == '0')
+			|| (world->char_position.x < new_position_x && world->map[(int)(new_position_y)][(int)(new_position_x - 0.05)] == '0'))
+		world->char_position.x = new_position_x;
+
+		if((world->char_position.y > new_position_y && world->map[(int)(new_position_y + 0.05)][(int)(new_position_x)] == '0')
+			|| (world->char_position.y < new_position_y && world->map[(int)(new_position_y - 0.05)][(int)(new_position_x)] == '0'))
+		world->char_position.y = new_position_y;
+	*/
+	}			
+
+
 }
 
 void	rotate_vector(t_vector *v, double sinv, double cosv)

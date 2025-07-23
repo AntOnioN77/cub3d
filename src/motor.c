@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:09:58 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/17 23:26:26 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/23 16:00:09 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,14 +145,14 @@ double hit_on_wall(t_ray *ray, t_world *world, t_wall *wall, double *impact_on_w
 	if (*wall == VERTICAL)
 	{
 		distance = ray->side_dist_x - ray->delta_dist_x;
-		*wall = (ray->ray_dir.x > 0) ? EAST : WEST;
+		*wall = (ray->ray_dir.x > 0) ? EAST : WEST; //ternario, prohibido por norma OJO!!
 		*impact_on_wall = calculate_impact_on_wall(&ray->ray_dir, *wall, world, distance);
 		return (distance);
 	}
 	else if (*wall == HORIZONTAL)
 	{
 		distance = ray->side_dist_y - ray->delta_dist_y;
-		*wall = (ray->ray_dir.y > 0) ? NORTH : SOUTH;
+		*wall = (ray->ray_dir.y > 0) ? NORTH : SOUTH; //ternario, prohibido por norma OJO!!
 		*impact_on_wall = calculate_impact_on_wall(&ray->ray_dir, *wall, world, distance);
 		return (distance);
 	}
