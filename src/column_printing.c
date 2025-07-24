@@ -51,15 +51,20 @@ void print_one_column(t_world *world, int i, double distance, t_wall wall, doubl
     t_draw_info info;
     int			limits[2];
 
+	//Al ser static se calculan una sola vez, y segun la norma se pueden 
+	// inicializar y asignar en la misma linea.
+	static const double min_texture_distance = MIN_RELATION_TEXTURE_DISTANCE * WINDOW_HEIGHT;
+	static const double max_texture_distance = MAX_RELATION_TEXTURE_DISTANCE * WINDOW_HEIGHT;
+
     calculate_draw_limits(distance, &limits[0], &limits[1]);
     info.data = world->data;
     info.tex = &world->textures;
     info.tex_addr = get_texture_addr(info.tex, wall);
     info.tex_x = (int)impact % info.tex->width;// Mira la ultima linea de calculate_impact_on_wall(). creo que nos estamos pisando la forma en que calculamos a que porcion de la textura a golpeado el rayo
-	if (distance < MIN_TEXTURE_DISTANCE)
-		distance = MIN_TEXTURE_DISTANCE;//cuando distance es un numero muy pequeño info.line_h se convierte en un numero demasiado grande que termina causando integer oberflow
-	if (distance > MAX_TEXTURE_DISTANCE)
-		distance = MAX_TEXTURE_DISTANCE; //XD tambien es necesario limitar la distancia maxima. (Para mapas muy grandes)
+	if (distance < min_texture_distance)
+		distance = min_texture_distance;//cuando distance es un numero muy pequeño info.line_h se convierte en un numero demasiado grande que termina causando integer oberflow
+	if (distance > max_texture_distance)
+		distance = max_texture_distance; //XD tambien es necesario limitar la distancia maxima. (Para mapas muy grandes)
 	info.line_h = (int)((double)WINDOW_HEIGHT / distance);
     info.i = i;
     draw_pixel_column(&info, limits[0], limits[1]);
