@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/23 23:17:52 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/24 10:42:22 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,10 @@
 
 //Definiciones de constantes
 # define PLANE_MAGNITUDE 0.577 //PLANE_MAGNITUDE = tan(FOV / 2) = tan(π/6) ≈ 0.577
-# define WINDOW_WIDTH 640
-# define WINDOW_HEIGHT 480
+# define WINDOW_WIDTH 1280//640
+# define WINDOW_HEIGHT 960//480 //OJO!! aumentar la resolucion sin aumentar MIN_RAY_LEN hace CRASH!!
+# define MIN_TEXTURE_DISTANCE 0.006
+# define MAX_TEXTURE_DISTANCE 20.0
 # define MAX_RAY_DISTANCE 1e30
 # define ROT_STEP 0.01
 # define ROT_SIN 0.009999833334166664   // sin(0.01)

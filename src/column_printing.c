@@ -56,7 +56,10 @@ void print_one_column(t_world *world, int i, double distance, t_wall wall, doubl
     info.tex = &world->textures;
     info.tex_addr = get_texture_addr(info.tex, wall);
     info.tex_x = (int)impact % info.tex->width;// Mira la ultima linea de calculate_impact_on_wall(). creo que nos estamos pisando la forma en que calculamos a que porcion de la textura a golpeado el rayo
-if (distance < 0.002){distance = 0.002;}//cuando distance es un numero muy pequeño info.line_h se convierte en un numero demasiado grande que termina causando integer oberflow
+	if (distance < MIN_TEXTURE_DISTANCE)
+		distance = MIN_TEXTURE_DISTANCE;//cuando distance es un numero muy pequeño info.line_h se convierte en un numero demasiado grande que termina causando integer oberflow
+	if (distance > MAX_TEXTURE_DISTANCE)
+		distance = MAX_TEXTURE_DISTANCE; //XD tambien es necesario limitar la distancia maxima. (Para mapas muy grandes)
 	info.line_h = (int)((double)WINDOW_HEIGHT / distance);
     info.i = i;
     draw_pixel_column(&info, limits[0], limits[1]);
