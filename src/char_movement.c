@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:50:51 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/29 15:19:40 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/29 23:53:47 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,17 @@ void	set_position(double new_position_x, double new_position_y,
 		&& new_position_y >= 0 && new_position_x >= 0)
 	{
 		if (new_position_x - (int)new_position_x > 0.5)
-			next_step_x = new_position_x + 0.1;
+			next_step_x = new_position_x + 0.04;
 		else
-			next_step_x = new_position_x - 0.1;
+			next_step_x = new_position_x - 0.04;
 		if (new_position_y - (int)new_position_y > 0.5)
-			next_step_y = new_position_y + 0.1;
+			next_step_y = new_position_y + 0.04;
 		else
-			next_step_y = new_position_y - 0.1;
-		if (world->map[(int)(next_step_y)][(int)(next_step_x)] == '0')
+			next_step_y = new_position_y - 0.04;
+		if (world->map[(int)(new_position_y)][(int)(new_position_x)] == '0' //por si se rompe la cabeza contra una esquina XDDD
+			&& world->map[(int)(next_step_y)][(int)(next_step_x)] == '0'
+			&& world->map[(int)(next_step_y)][(int)(new_position_x)] == '0'
+			&& world->map[(int)(new_position_y)][(int)(next_step_x)] == '0')
 		{
 			world->char_position.x = new_position_x;
 			world->char_position.y = new_position_y;
