@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:09:58 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/29 12:25:15 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/29 13:18:13 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,8 @@ double	calc_impact_on_wall(t_vector *ray_dir, t_wall wall,
 		impact_on_wall = world->char_position.y + (distance * ray_dir->y);
 	else
 		perror("Error: one_ray maybe shot to infinite.\n");
-	return ((impact_on_wall - (int)impact_on_wall) * (TEXTURE_WIDTH - 1));
+	return ((impact_on_wall - (int)impact_on_wall)
+		* (world->textures.width - 1));
 }
 
 void	go_further(t_ray *ray, t_wall *wall)

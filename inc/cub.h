@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/29 12:25:57 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/29 12:44:52 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 # include "../libft/libft.h"
 # include "../get_next_line/get_next_line.h"
 # include <stdio.h>
-# include <stdbool.h> // Para valores booleanos
-# include <fcntl.h> // Para apertura de archivos (texturas)
-# include <errno.h> // Para mensajes de error
+# include <stdbool.h>
+# include <fcntl.h>
+# include <errno.h>
 
 //Codigos de error para MLX
 # define ERROR_MLX_INIT 1
@@ -30,15 +30,12 @@
 # define CLOSING_WINDOW 0
 
 //Definiciones de constantes
-# define PLANE_MAGNITUDE 0.577 //PLANE_MAGNITUDE = tan(FOV / 2) = tan(π/6) ≈ 0.577
+	//PLANE_MAGNITUDE = tan(FOV / 2) = tan(π/6) ≈ 0.577
+# define PLANE_MAGNITUDE 0.577
 # define WINDOW_WIDTH 640
-# define WINDOW_HEIGHT 480 //OJO!! aumentar la resolucion sin aumentar MIN_RAY_LEN hace CRASH!!
-
-//# define MIN_TEXTURE_DISTANCE 0.008//o mayor
-//# define MAX_TEXTURE_DISTANCE 60.0//o menor
-
-# define MIN_RELATION_TEXTURE_DISTANCE 0.000005
-# define MAX_RELATION_TEXTURE_DISTANCE 0.03
+# define WINDOW_HEIGHT 480
+# define TEXTUR_MIN_RATIO 0.000005
+# define TEXTUR_MAX_RATIO 0.03
 
 # define MAX_RAY_DISTANCE 1e30
 # define ROT_STEP 0.01

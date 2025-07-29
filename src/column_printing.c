@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 16:32:15 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/29 12:22:48 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/29 13:21:23 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,24 +57,24 @@ static void	draw_pixel_column(t_draw_info *info, int start, int end)
 	}
 }
 
-void print_one_column(t_world *world, int i, t_column *column)
+void	print_one_column(t_world *world, int i, t_column *column)
 {
-	t_draw_info	info;
-	int			limits[2];
-	double distance;
-	static const double min_texture_distance = MIN_RELATION_TEXTURE_DISTANCE * WINDOW_HEIGHT;
-	static const double max_texture_distance = MAX_RELATION_TEXTURE_DISTANCE * WINDOW_HEIGHT;
+	t_draw_info			info;
+	int					limits[2];
+	double				distance;
+	static const double	min_texture_distance = TEXTUR_MIN_RATIO * WINDOW_HEIGHT;
+	static const double	max_texture_distance = TEXTUR_MAX_RATIO * WINDOW_HEIGHT;
 
 	distance = column->distance;
 	calculate_draw_limits(distance, &limits[0], &limits[1]);
 	info.data = world->data;
 	info.tex = &world->textures;
 	info.tex_addr = get_texture_addr(info.tex, column->wall);
-	info.tex_x = (int)column->impact % info.tex->width;// Mira la ultima linea de calculate_impact_on_wall(). creo que nos estamos pisando la forma en que calculamos a que porcion de la textura a golpeado el rayo
+	info.tex_x = (int)column->impact % info.tex->width; // % info.tex->width parece innecesario
 	if (distance < min_texture_distance)
-		distance = min_texture_distance;//cuando distance es un numero muy pequeño info.line_h se convierte en un numero demasiado grande que termina causando integer oberflow
+		distance = min_texture_distance;
 	if (distance > max_texture_distance)
-		distance = max_texture_distance; //XD tambien es necesario limitar la distancia maxima. (Para mapas muy grandes)
+		distance = max_texture_distance;
 	info.line_h = (int)((double)WINDOW_HEIGHT / distance);
 	info.i = i;
 	draw_pixel_column(&info, limits[0], limits[1]);
