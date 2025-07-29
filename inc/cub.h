@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/29 15:21:29 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/29 15:54:16 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,16 @@
 //Definiciones de constantes
 	//PLANE_MAGNITUDE = tan(FOV / 2) = tan(π/6) ≈ 0.577
 # define PLANE_MAGNITUDE 0.577
-# define WINDOW_WIDTH 640
-# define WINDOW_HEIGHT 480
+# define WINDOW_WIDTH 2560//640
+# define WINDOW_HEIGHT 1920//480
 # define TEXTUR_MIN_RATIO 0.000005
 # define TEXTUR_MAX_RATIO 0.03
 
 # define MAX_RAY_DISTANCE 1e30
 //# define ROT_STEP 0.01
-# define ROT_SIN 0.009999833334166664   // sin(0.01)
-# define ROT_COS 0.9999500004166653     // cos(0.01)
-# define STEP 0.01
+# define ROT_SIN 0.017452406//0.009999833334166664//sin(0.01)
+# define ROT_COS 0.999847695//0.9999500004166653//cos(0.01)
+# define STEP 0.05//0.01
 # define M_PI 3.14159265358979323846 //Pi por algun motivo no se carga desde math.h
 # define TEXTURE_WIDTH 64
 # define TEXTURE_HEIGHT 64
