@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/29 12:44:52 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/29 15:21:29 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@
 # define TEXTUR_MAX_RATIO 0.03
 
 # define MAX_RAY_DISTANCE 1e30
-# define ROT_STEP 0.01
+//# define ROT_STEP 0.01
 # define ROT_SIN 0.009999833334166664   // sin(0.01)
 # define ROT_COS 0.9999500004166653     // cos(0.01)
-# define MOVE_STEP 0.01
+# define STEP 0.01
 # define M_PI 3.14159265358979323846 //Pi por algun motivo no se carga desde math.h
 # define TEXTURE_WIDTH 64
 # define TEXTURE_HEIGHT 64
@@ -173,6 +173,8 @@ typedef struct s_column
 
 void	char_movement(t_world *world);
 void	rotate_vector(t_vector *vector, double sinv, double cosv);
+void	set_position(double new_position_x, double new_position_y,
+	t_world *world);
 
 //main.c
 void	calculate_camera_plane(double char_dir_x, double char_dir_y, t_vector *plane_direction);

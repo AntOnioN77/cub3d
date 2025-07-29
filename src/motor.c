@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:09:58 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/29 13:18:13 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/29 15:25:06 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,29 +19,25 @@ static void	clear_background(t_world *world)
 {
 	int		x;
 	int		y;
-	t_data	*data;
 
-	data = world->data;
-	/* Techo: desde y = 0 hasta la mitad */
 	y = 0;
 	while (y < WINDOW_HEIGHT / 2)
 	{
 		x = 0;
 		while (x < WINDOW_WIDTH)
 		{
-			ft_pixel_put(data, x, y, world->textures.ceiling_color);
+			ft_pixel_put(world->data, x, y, world->textures.ceiling_color);
 			x++;
 		}
 		y++;
 	}
-	/* Suelo: desde la mitad hasta WINDOW_HEIGHT */
 	y = WINDOW_HEIGHT / 2;
 	while (y < WINDOW_HEIGHT)
 	{
 		x = 0;
 		while (x < WINDOW_WIDTH)
 		{
-			ft_pixel_put(data, x, y, world->textures.floor_color);
+			ft_pixel_put(world->data, x, y, world->textures.floor_color);
 			x++;
 		}
 		y++;
