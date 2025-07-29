@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:09:58 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/23 23:22:03 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/29 12:16:18 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,16 +65,14 @@ int	motor(t_world *world)
 void	draw_image(t_world *world)
 {
 	int		i;
-	double	distance;
-	double	impact_on_wall;
-	t_wall	wall;
+	t_ray	ray;
 
 	clear_background(world);
 	i = 0;
 	while (i < WINDOW_WIDTH)
 	{
-		distance = one_ray(i, &wall, world, &impact_on_wall);
-		print_one_column(world, i, distance, wall, impact_on_wall);
+		ray.distance = one_ray(i, &(ray.wall), world, &(ray.impact));
+		print_one_column(world, i, ray.distance, ray.wall, ray.impact);
 		i++;
 	}
 }

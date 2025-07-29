@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/25 01:03:51 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/29 12:17:37 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,13 @@ typedef struct s_world
 	bool    key_down[256]; // Para poder movernos en varias direcciones a la vez
 }		t_world;
 
+typedef struct s_ray
+{
+    double distance;
+    t_wall wall;
+    double impact;
+} t_ray;
+
 //char_movement.c
 
 void	char_movement(t_world *world);
@@ -189,8 +196,6 @@ double	calc_impact_on_wall(t_vector *ray_dir, t_wall wall,
 			t_world *world, double distance);
 void	go_further(t_ray *ray, t_wall *wall);
 void	set_wall_type(t_wall *wall, t_vector *vector);
-void	print_one_column(t_world *world, int i, double distance, t_wall wall,
-			double impact_on_wall);
 int		motor(t_world *world);
 double	one_ray(int i, t_wall *wall, t_world *world, double *impact_on_wall);
 void	draw_image(t_world *world);
@@ -207,14 +212,6 @@ char	**ft_strarr_append(char **arr, const char *new_str);
 void	check_extension(const char *file);
 
 //column_printing.c
-void	print_one_column(t_world *world, int i, double distance, t_wall wall, double impact);
-
-
-//+++++++++++++++++++++++++++++++++++//
-// BORRAR ANTES DE ENTREGAR MOOKS    //
-//+++++++++++++++++++++++++++++++++++//
-#define DEBUGMODE 0 //1 para activar mensajes de debug, 0 para desactivarlos
-#define DEBUGMODE2 0
-//+++++++++++++++++++++++++++++++++++//
+void	print_one_column(t_world *world, int i, t_ray *ray);
 
 #endif
