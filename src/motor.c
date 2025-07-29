@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:09:58 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/29 15:29:35 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/29 16:36:42 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	draw_image(t_world *world)
 	int			i;
 	t_column	column;
 
+	ft_bzero(&column, sizeof(t_column));
 	clear_background(world);
 	i = 0;
 	while (i < WINDOW_WIDTH)

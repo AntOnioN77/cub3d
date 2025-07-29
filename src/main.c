@@ -118,6 +118,7 @@ int	main(int argc, char **argv)
 	t_data		*data;
 	int			i;
 
+	ft_bzero(&config, sizeof(t_config));
 	if (argc != 2)
 		error_exit("Uso: ./cub3D <archivo_de_config>");
 	check_extension(argv[1]);
