@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:09:58 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/29 15:25:06 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/29 15:29:35 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ static void	clear_background(t_world *world)
 		y++;
 	}
 }
+
 //LLamada iterativamente por mlx_loop_hook() debe actualizar la imagen y
 // empujarla a la ventana 
 int	motor(t_world *world)
@@ -51,16 +52,14 @@ int	motor(t_world *world)
 
 	data = world->data;
 	char_movement(world);
-	//Redibujar imagen
 	draw_image(world);
-	//Poner la imagen en la ventana
 	mlx_put_image_to_window(data->mlx, data->window, data->img, 0, 0);
 	return (1);
 }
 
 void	draw_image(t_world *world)
 {
-	int		i;
+	int			i;
 	t_column	column;
 
 	clear_background(world);
@@ -135,8 +134,8 @@ double	one_ray(int i, t_wall *wall, t_world *world, double *impact_on_wall)
 
 double hit_on_wall(t_ray *ray, t_world *world, t_wall *wall, double *impact_on)
 {
-	double distance;
-	
+	double	distance;
+
 	if (*wall == VERTICAL)
 	{
 		distance = ray->side_dist_x - ray->delta_dist_x;
@@ -161,40 +160,10 @@ double hit_on_wall(t_ray *ray, t_world *world, t_wall *wall, double *impact_on)
 		exit(1);
 }
 
-/*
-double hit_on_wall(t_ray *ray, t_world *world, t_wall *wall, double *impact_on_wall)
+void	init_ray(t_vector *char_position, const t_vector *vector, t_ray *ray)
 {
-	double distance;
-
-	if (*wall == VERTICAL)
-	{
-		distance = ray->side_dist_x - ray->delta_dist_x;
-		*wall = (ray->ray_dir.x > 0) ? EAST : WEST; //ternario, prohibido por norma OJO!!
-		*impact_on_wall = calculate_impact_on_wall(&ray->ray_dir, *wall, world, distance);
-		return (distance);
-	}
-	else if (*wall == HORIZONTAL)
-	{
-		distance = ray->side_dist_y - ray->delta_dist_y;
-		*wall = (ray->ray_dir.y > 0) ? NORTH : SOUTH; //ternario, prohibido por norma OJO!!
-		*impact_on_wall = calculate_impact_on_wall(&ray->ray_dir, *wall, world, distance);
-		return (distance);
-	}
-	else
-	{
-		perror("Error: hit_on_wall called with invalid wall type\n");
-		exit(1);
-	}
-}
-*/
-
-
-void	 init_ray(t_vector *char_position, const t_vector *vector, t_ray *ray)
-{
-	//En que baldosa del mapa comienza el rayo (su valor se ira incrementando al lo largo del DDA):
 	ray->tile_x = (int)char_position->x;
 	ray->tile_y = (int)char_position->y;
-	//A lo largo del rayo, cual es la distancia entre dos lineas del mismo eje:
 	if (vector->x == 0.0)
 		ray->delta_dist_x = MAX_RAY_DISTANCE;
 	else
@@ -203,7 +172,6 @@ void	 init_ray(t_vector *char_position, const t_vector *vector, t_ray *ray)
 		ray->delta_dist_y = MAX_RAY_DISTANCE;
 	else
 		ray->delta_dist_y = fabs(1 / vector->y);
-	//Cuanto falta hasta la proxima linea ray->side_dist_ :
 	calc_side_dist(ray, char_position, vector);
 }
 
@@ -227,7 +195,7 @@ void	calc_side_dist(t_ray *ray, t_vector *char_position,
 	if (vector->y > 0)
 	{
 		ray->step_y = 1;
-		ray->side_dist_y = (ray->tile_y  + 1.0 - char_position->y)
+		ray->side_dist_y = (ray->tile_y + 1.0 - char_position->y)
 			* ray->delta_dist_y;
 	}
 	else
