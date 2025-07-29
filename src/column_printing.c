@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 16:32:15 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/29 12:14:06 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/29 12:22:48 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void	draw_pixel_column(t_draw_info *info, int start, int end)
 	}
 }
 
-void print_one_column(t_world *world, int i, t_ray *ray)
+void print_one_column(t_world *world, int i, t_column *column)
 {
 	t_draw_info	info;
 	int			limits[2];
@@ -65,12 +65,12 @@ void print_one_column(t_world *world, int i, t_ray *ray)
 	static const double min_texture_distance = MIN_RELATION_TEXTURE_DISTANCE * WINDOW_HEIGHT;
 	static const double max_texture_distance = MAX_RELATION_TEXTURE_DISTANCE * WINDOW_HEIGHT;
 
-	distance = ray->distance;
+	distance = column->distance;
 	calculate_draw_limits(distance, &limits[0], &limits[1]);
 	info.data = world->data;
 	info.tex = &world->textures;
-	info.tex_addr = get_texture_addr(info.tex, ray->wall);
-	info.tex_x = (int)ray->impact % info.tex->width;// Mira la ultima linea de calculate_impact_on_wall(). creo que nos estamos pisando la forma en que calculamos a que porcion de la textura a golpeado el rayo
+	info.tex_addr = get_texture_addr(info.tex, column->wall);
+	info.tex_x = (int)column->impact % info.tex->width;// Mira la ultima linea de calculate_impact_on_wall(). creo que nos estamos pisando la forma en que calculamos a que porcion de la textura a golpeado el rayo
 	if (distance < min_texture_distance)
 		distance = min_texture_distance;//cuando distance es un numero muy pequeño info.line_h se convierte en un numero demasiado grande que termina causando integer oberflow
 	if (distance > max_texture_distance)
