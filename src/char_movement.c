@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:50:51 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/29 13:54:09 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/29 14:08:56 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,25 @@ void    char_movement(t_world *world)
 	{
 		new_position_x = world->char_position.x + world->char_direction.x * MOVE_STEP;
 		new_position_y = world->char_position.y + world->char_direction.y * MOVE_STEP;
-		next_step_x = world->char_direction.x / 4;
-		next_step_y = world->char_direction.y / 4;
+
 	}
 	if (world->key_down['s'])
 	{
 		new_position_x = world->char_position.x - world->char_direction.x * MOVE_STEP;
 		new_position_y = world->char_position.y - world->char_direction.y * MOVE_STEP;
-		next_step_x = - (world->char_direction.x / 4);
-		next_step_y = - (world->char_direction.y /4);
 	}
 	if ((int)new_position_y < (world->map_height) && (int)new_position_x < (world->map_width) //puede ser innecesario
 		&& new_position_y >= 0 && new_position_x >= 0)
 	{
-		if(world->map[(int)(new_position_y + next_step_y)][(int)(new_position_x + next_step_x)] == '0')
-		//por que  "+ world->char_direction._"? anticiparse un paso en cada direccion, para evitar pegarse a distancia 0 de un muro 
+		if (new_position_x - (int)new_position_x > 0.5)
+			next_step_x = new_position_x + 0.1;
+		else
+			next_step_x = new_position_x - 0.1;
+		if (new_position_y - (int)new_position_y > 0.5)
+			next_step_y = new_position_y + 0.1;
+		else
+			next_step_y = new_position_y - 0.1;
+		if(world->map[(int)(next_step_y)][(int)(next_step_x)] == '0')
 		{
 			world->char_position.x = new_position_x;
 			world->char_position.y = new_position_y;
