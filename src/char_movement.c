@@ -6,38 +6,66 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:50:51 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/17 16:57:50 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/30 10:16:32 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub.h"
 
-void    char_movement(t_world *world)
+void	char_movement(t_world *world)
 {
-	/* Giro a la derecha */
+	t_vector	new_pos;
+
+	new_pos = world->char_position;
 	if (world->key_down['d'])
 	{
 		rotate_vector(&world->char_direction, ROT_SIN, ROT_COS);
 		rotate_vector(&world->plane_direction, ROT_SIN, ROT_COS);
 	}
-	/* Giro a la izquierda */
 	if (world->key_down['a'])
 	{
-		/* rota con -ROT_STEP */
 		rotate_vector(&world->char_direction, -ROT_SIN, ROT_COS);
 		rotate_vector(&world->plane_direction, -ROT_SIN, ROT_COS);
 	}
-	/* Avanzar */
 	if (world->key_down['w'])
 	{
-		world->char_position.x += world->char_direction.x * MOVE_STEP;
-		world->char_position.y += world->char_direction.y * MOVE_STEP;
+		new_pos.x = world->char_position.x + world->char_direction.x * STEP;
+		new_pos.y = world->char_position.y + world->char_direction.y * STEP;
 	}
-	/* Retroceder */
 	if (world->key_down['s'])
 	{
-		world->char_position.x -= world->char_direction.x * MOVE_STEP;
-		world->char_position.y -= world->char_direction.y * MOVE_STEP;
+		new_pos.x = world->char_position.x - world->char_direction.x * STEP;
+		new_pos.y = world->char_position.y - world->char_direction.y * STEP;
+	}
+	set_position(new_pos.x, new_pos.y, world);
+}
+
+void	set_position(double new_position_x, double new_position_y,
+	t_world *world)
+{
+	double	margin_x;
+	double	margin_y;
+
+	if ((int)new_position_y < (world->map_height)
+		&& (int)new_position_x < (world->map_width)
+		&& new_position_y >= 0 && new_position_x >= 0)
+	{
+		if (new_position_x - (int)new_position_x > 0.5)
+			margin_x = new_position_x + 0.04;
+		else
+			margin_x = new_position_x - 0.04;
+		if (new_position_y - (int)new_position_y > 0.5)
+			margin_y = new_position_y + 0.04;
+		else
+			margin_y = new_position_y - 0.04;
+		if (world->map[(int)(new_position_y)][(int)(new_position_x)] == '0' //new_position es un camino?
+			&& world->map[(int)(margin_y)][(int)(margin_x)] == '0'			//caso especial para esquinas
+			&& world->map[(int)(margin_y)][(int)(new_position_x)] == '0'	//tengo el margen minimo en el eje Y?
+			&& world->map[(int)(new_position_y)][(int)(margin_x)] == '0')	//tengo el margen minimo en el eje X?
+		{
+			world->char_position.x = new_position_x;
+			world->char_position.y = new_position_y;
+		}
 	}
 }
 
@@ -67,4 +95,3 @@ void	rotate_normalize_vector(t_vector *vector, double sin, double cos)
 	vector->x = result_x / magnitude;
 	vector->y = result_y / magnitude;
 }
-
