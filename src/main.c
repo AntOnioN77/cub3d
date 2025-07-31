@@ -119,7 +119,7 @@ int main(int argc, char **argv)
 		error_exit("Uso: ./cub3D <archivo_de_config>");
 	check_extension(argv[1]);
     /* 1) Lectura y parseo del .cub */
-    parse_file(argv[1], &config);
+    parse_map(argv[1], &config);
     /* 2) Inicialización MLX */
     init_data(&data);
     /* 3) Inicialización de world con la configuración parseada */
