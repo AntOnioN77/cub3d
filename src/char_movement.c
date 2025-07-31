@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:50:51 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/29 23:53:47 by antofern         ###   ########.fr       */
+/*   Updated: 2025/07/30 10:16:32 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,25 +43,25 @@ void	char_movement(t_world *world)
 void	set_position(double new_position_x, double new_position_y,
 	t_world *world)
 {
-	double	next_step_x;
-	double	next_step_y;
+	double	margin_x;
+	double	margin_y;
 
 	if ((int)new_position_y < (world->map_height)
 		&& (int)new_position_x < (world->map_width)
 		&& new_position_y >= 0 && new_position_x >= 0)
 	{
 		if (new_position_x - (int)new_position_x > 0.5)
-			next_step_x = new_position_x + 0.04;
+			margin_x = new_position_x + 0.04;
 		else
-			next_step_x = new_position_x - 0.04;
+			margin_x = new_position_x - 0.04;
 		if (new_position_y - (int)new_position_y > 0.5)
-			next_step_y = new_position_y + 0.04;
+			margin_y = new_position_y + 0.04;
 		else
-			next_step_y = new_position_y - 0.04;
-		if (world->map[(int)(new_position_y)][(int)(new_position_x)] == '0' //por si se rompe la cabeza contra una esquina XDDD
-			&& world->map[(int)(next_step_y)][(int)(next_step_x)] == '0'
-			&& world->map[(int)(next_step_y)][(int)(new_position_x)] == '0'
-			&& world->map[(int)(new_position_y)][(int)(next_step_x)] == '0')
+			margin_y = new_position_y - 0.04;
+		if (world->map[(int)(new_position_y)][(int)(new_position_x)] == '0' //new_position es un camino?
+			&& world->map[(int)(margin_y)][(int)(margin_x)] == '0'			//caso especial para esquinas
+			&& world->map[(int)(margin_y)][(int)(new_position_x)] == '0'	//tengo el margen minimo en el eje Y?
+			&& world->map[(int)(new_position_y)][(int)(margin_x)] == '0')	//tengo el margen minimo en el eje X?
 		{
 			world->char_position.x = new_position_x;
 			world->char_position.y = new_position_y;
