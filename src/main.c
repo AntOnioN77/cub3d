@@ -122,7 +122,7 @@ int	main(int argc, char **argv)
 	if (argc != 2)
 		error_exit("Uso: ./cub3D <archivo_de_config>");
 	check_extension(argv[1]);
-	parse_file(argv[1], &config);
+    	parse_map(argv[1], &config);
 	init_data(&data);
 	init_world(&world, data, &config);
 	load_textures(&world);

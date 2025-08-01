@@ -205,11 +205,23 @@ void	print_columns(double distances[], t_data *data, t_textures textures);
 void	calc_side_dist(t_ray *ray, t_vector *char_position, const t_vector *vector);
 
 //map_check.c
-void	error_exit(const char *msg);
-char	**collect_map(int fd);
-void	parse_file(const char *path, t_config *cfg);
-char	**ft_strarr_append(char **arr, const char *new_str);
+int	has_valid_chars(char **map);
+int	is_map_closed(char **map);
+int	has_one_player(char **map);
+
+//parse_map.c
 void	check_extension(const char *file);
+void	parse_map(const char *path, t_config *cfg);
+
+//parse_map_cfg.c
+void	parse_config(int fd, t_config *cfg);
+
+//map_check_utils.c
+void	error_exit(const char *msg);
+size_t	ft_strarr_len(char **arr);
+void	ft_strarr_free(char **arr);
+char	**ft_strarr_append(char **arr, const char *new_str);
+char	**normalize_map(char **map);
 
 //column_printing.c
 void	print_one_column(t_world *world, int i, t_column *column);
