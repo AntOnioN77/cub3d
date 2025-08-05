@@ -1,11 +1,5 @@
 # CUB3D
 
-## AVISOS!!
-	- Voy a usar la "minilibx-linux" oficial. Apartamos la "MLX 42 codam".
-	- Hay un monton de codigo de prueba, que no puede quedar en la version final:
-		*Para tener un mapa de pruebas, sin las funciones de parseo.
-		*Para mostrar un minimapa que indique hacia donde mira el personaje.
-
 ## Lista de Tareas
 
 ### 1. Validar el Mapa
@@ -43,11 +37,3 @@
 3. **Verificar cierre del mapa**:
    - Usar flood fill o método similar para asegurar que el mapa está cerrado.
 
-### 3. Crear motor gráfico
-
-1. **Representación del personaje: posición y dirección**
-2. **Dibujar la imagen**
-   - Algoritmo de trazado de rayos. Debe medir la distancia hasta el obstáculo más próximo.
-   - Un rayo para cada x de la imagen que queremos dibujar. ¿Cuántos grados de desviación entre un rayo y el siguiente?
-   - El tamaño de la columna se calcula en base a la distancia del obstáculo.
-   - (...)

@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/17 23:24:51 by antofern         ###   ########.fr       */
+/*   Updated: 2025/08/05 10:49:14 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,13 @@
 # define CLOSING_WINDOW 0
 
 //Definiciones de constantes
-# define PLANE_MAGNITUDE 0.577 //PLANE_MAGNITUDE = tan(FOV / 2) = tan(π/6) ≈ 0.577
-# define WINDOW_WIDTH 640
-# define WINDOW_HEIGHT 480
+	//PLANE_MAGNITUDE = tan(FOV / 2) = tan(π/6) ≈ 0.577
+# define PLANE_MAGNITUDE 0.577
+# define WINDOW_WIDTH 1280//640
+# define WINDOW_HEIGHT 720//480
+# define TEXTUR_MIN_RATIO 0.000005
+# define TEXTUR_MAX_RATIO 0.03
+
 # define MAX_RAY_DISTANCE 1e30
 # define ROT_STEP 0.01
 # define ROT_SIN 0.009999833334166664   // sin(0.01)
@@ -41,6 +45,10 @@
 # define M_PI 3.14159265358979323846 //Pi por algun motivo no se carga desde math.h
 # define TEXTURE_WIDTH 64
 # define TEXTURE_HEIGHT 64
+# define PLAYER_RADIUS 0.1
+
+//Definición de macro de error para el parseo:
+# define ERR_PREFIX "Error\n"
 
 //Definición de macro de error para el parseo:
 # define ERR_PREFIX "Error\n"
@@ -158,10 +166,19 @@ typedef struct s_world
 	bool    key_down[256]; // Para poder movernos en varias direcciones a la vez
 }		t_world;
 
+typedef struct s_column
+{
+    double distance;
+    t_wall wall;
+    double impact;
+} t_column;
+
 //char_movement.c
 
 void	char_movement(t_world *world);
 void	rotate_vector(t_vector *vector, double sinv, double cosv);
+void	set_position(double new_position_x, double new_position_y,
+	t_world *world);
 
 //main.c
 void	calculate_camera_plane(double char_dir_x, double char_dir_y, t_vector *plane_direction);
@@ -178,12 +195,10 @@ int		init_data(t_data **data);
 //motor.c
 double	hit_on_wall(t_ray *ray, t_world *world, t_wall *wall,
 			double *impact_on_wall);
-double	calculate_impact_on_wall(t_vector *ray_dir, t_wall wall,
+double	calc_impact_on_wall(t_vector *ray_dir, t_wall wall,
 			t_world *world, double distance);
 void	go_further(t_ray *ray, t_wall *wall);
 void	set_wall_type(t_wall *wall, t_vector *vector);
-void	print_one_column(t_world *world, int i, double distance, t_wall wall,
-			double impact_on_wall);
 int		motor(t_world *world);
 double	one_ray(int i, t_wall *wall, t_world *world, double *impact_on_wall);
 void	draw_image(t_world *world);
@@ -212,13 +227,6 @@ char	**ft_strarr_append(char **arr, const char *new_str);
 char	**normalize_map(char **map);
 
 //column_printing.c
-void	print_one_column(t_world *world, int i, double distance, t_wall wall, double impact);
-
-//+++++++++++++++++++++++++++++++++++//
-// BORRAR ANTES DE ENTREGAR MOOKS    //
-//+++++++++++++++++++++++++++++++++++//
-#define DEBUGMODE 0 //1 para activar mensajes de debug, 0 para desactivarlos
-#define DEBUGMODE2 0
-//+++++++++++++++++++++++++++++++++++//
+void	print_one_column(t_world *world, int i, t_column *column);
 
 #endif
