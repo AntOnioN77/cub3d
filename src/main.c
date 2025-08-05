@@ -24,7 +24,6 @@ void load_textures(t_world *w)
 		&w->textures.width, &w->textures.height);
 	if (!w->textures.ea_img)
 		error_exit("Error: textura este no encontrada");
-	// Sacar direcciones
 	w->textures.no_addr = mlx_get_data_addr(w->textures.no_img,
 		&w->textures.bpp, &w->textures.line_length, &w->textures.endian);
 	w->textures.so_addr = mlx_get_data_addr(w->textures.so_img,
@@ -63,7 +62,7 @@ static int	init_world_player(t_world *world)
 					world->char_direction = (t_vector){-1, 0};
 				calculate_camera_plane(world->char_direction.x,
 					world->char_direction.y, &world->plane_direction);
-				world->map[i][j] = '0';//Antonio 23-7-12:38
+				world->map[i][j] = '0';
 				return (0);
 			}
 			j++;
@@ -122,11 +121,11 @@ int	main(int argc, char **argv)
 	if (argc != 2)
 		error_exit("Uso: ./cub3D <archivo_de_config>");
 	check_extension(argv[1]);
-	parse_file(argv[1], &config);
+	parse_map(argv[1], &config);
 	init_data(&data);
 	init_world(&world, data, &config);
 	load_textures(&world);
-	i = 0; //Antonio 23-7-12:38
+	i = 0;
 	while (i < 256)
 		world.key_down[i++] = false;
 	mlx_hook(data->window, KEY_PRESS, KEY_PRESS_MASK, press_key, &world);

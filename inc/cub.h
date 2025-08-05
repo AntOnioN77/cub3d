@@ -18,10 +18,9 @@
 # include "../libft/libft.h"
 # include "../get_next_line/get_next_line.h"
 # include <stdio.h>
-# include <stdbool.h>
-# include <fcntl.h>
-# include <errno.h>
-# include "../libft/libft.h"
+# include <stdbool.h> // Para valores booleanos
+# include <fcntl.h> // Para apertura de archivos (texturas)
+# include <errno.h> // Para mensajes de error
 
 //Codigos de error para MLX
 # define ERROR_MLX_INIT 1
@@ -39,14 +38,17 @@
 # define TEXTUR_MAX_RATIO 0.03
 
 # define MAX_RAY_DISTANCE 1e30
-//# define ROT_STEP 0.01
-# define ROT_SIN 0.009999833334166664//0.017452406//
-# define ROT_COS 0.9999500004166653//0.999847695//
-# define STEP 0.01//0.05
+# define ROT_STEP 0.01
+# define ROT_SIN 0.009999833334166664   // sin(0.01)
+# define ROT_COS 0.9999500004166653     // cos(0.01)
+# define MOVE_STEP 0.01
 # define M_PI 3.14159265358979323846 //Pi por algun motivo no se carga desde math.h
 # define TEXTURE_WIDTH 64
 # define TEXTURE_HEIGHT 64
 # define PLAYER_RADIUS 0.1
+
+//Definición de macro de error para el parseo:
+# define ERR_PREFIX "Error\n"
 
 //Definición de macro de error para el parseo:
 # define ERR_PREFIX "Error\n"
@@ -206,11 +208,23 @@ void	print_columns(double distances[], t_data *data, t_textures textures);
 void	calc_side_dist(t_ray *ray, t_vector *char_position, const t_vector *vector);
 
 //map_check.c
-void	error_exit(const char *msg);
-char	**collect_map(int fd);
-void	parse_file(const char *path, t_config *cfg);
-char	**ft_strarr_append(char **arr, const char *new_str);
+int	has_valid_chars(char **map);
+int	is_map_closed(char **map);
+int	has_one_player(char **map);
+
+//parse_map.c
 void	check_extension(const char *file);
+void	parse_map(const char *path, t_config *cfg);
+
+//parse_map_cfg.c
+void	parse_config(int fd, t_config *cfg);
+
+//map_check_utils.c
+void	error_exit(const char *msg);
+size_t	ft_strarr_len(char **arr);
+void	ft_strarr_free(char **arr);
+char	**ft_strarr_append(char **arr, const char *new_str);
+char	**normalize_map(char **map);
 
 //column_printing.c
 void	print_one_column(t_world *world, int i, t_column *column);

@@ -29,13 +29,13 @@ void	char_movement(t_world *world)
 	}
 	if (world->key_down['w'])
 	{
-		new_pos.x = world->char_position.x + world->char_direction.x * STEP;
-		new_pos.y = world->char_position.y + world->char_direction.y * STEP;
+		new_pos.x = world->char_position.x + world->char_direction.x * MOVE_STEP;
+		new_pos.y = world->char_position.y + world->char_direction.y * MOVE_STEP;
 	}
 	if (world->key_down['s'])
 	{
-		new_pos.x = world->char_position.x - world->char_direction.x * STEP;
-		new_pos.y = world->char_position.y - world->char_direction.y * STEP;
+		new_pos.x = world->char_position.x - world->char_direction.x * MOVE_STEP;
+		new_pos.y = world->char_position.y - world->char_direction.y * MOVE_STEP;
 	}
 	set_position(new_pos.x, new_pos.y, world);
 }
