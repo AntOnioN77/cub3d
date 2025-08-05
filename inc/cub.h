@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/07/29 17:24:46 by antofern         ###   ########.fr       */
+/*   Updated: 2025/08/05 10:49:14 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@
 # define M_PI 3.14159265358979323846 //Pi por algun motivo no se carga desde math.h
 # define TEXTURE_WIDTH 64
 # define TEXTURE_HEIGHT 64
+# define PLAYER_RADIUS 0.1
 
 //Definición de macro de error para el parseo:
 # define ERR_PREFIX "Error\n"
