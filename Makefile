@@ -16,6 +16,7 @@ GNL_DIR     = get_next_line
 SOURCES     = $(SRC_DIR)/main.c $(SRC_DIR)/utils_for_mlx.c $(SRC_DIR)/motor.c \
 				$(SRC_DIR)/char_movement.c $(SRC_DIR)/map_check.c $(SRC_DIR)/column_printing.c\
 				$(SRC_DIR)/parse_map.c $(SRC_DIR)/parse_map_cfg.c $(SRC_DIR)/map_check_utils.c\
+				$(SRC_DIR)/memory_handler.c\
               $(GNL_DIR)/get_next_line.c \
               $(GNL_DIR)/get_next_line_utils.c
 OBJECTS     = $(SOURCES:%.c=$(BIN_DIR)/%.o)

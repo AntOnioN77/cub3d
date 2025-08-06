@@ -188,7 +188,8 @@ int		init_world(t_world *world, t_data *data, t_config *cfg);
 void	ft_pixel_put(t_data *data, int x, int y, int color);
 int		press_key(int keycode, t_world *world);
 int		release_key(int keycode, t_world *world);
-int		free_data(t_data **data, int error_code);
+
+//memory_handler.c
 int		close_win(t_world *world);
 int		init_data(t_data **data);
 
