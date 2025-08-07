@@ -70,7 +70,7 @@ void	print_one_column(t_world *world, int i, t_column *column)
 	info.data = world->data;
 	info.tex = &world->textures;
 	info.tex_addr = get_texture_addr(info.tex, column->wall);
-	info.tex_x = (int)column->impact % info.tex->width; // % info.tex->width parece innecesario
+	info.tex_x = (int)column->impact % info.tex->width;
 	if (distance < min_texture_distance)
 		distance = min_texture_distance;
 	if (distance > max_texture_distance)

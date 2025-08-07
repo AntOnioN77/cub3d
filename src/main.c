@@ -1,40 +1,40 @@
 #include "../inc/cub.h"
 
-void load_textures(t_world *w)
+void	load_textures(t_world *w)
 {
-	t_data *data = w->data;
+	t_data	*data;
 
+	data = w->data;
 	w->textures.no_img = mlx_xpm_file_to_image(
-		data->mlx, w->textures.no_texture, 
-		&w->textures.width, &w->textures.height);
+			data->mlx, w->textures.no_texture,
+			&w->textures.width, &w->textures.height);
 	if (!w->textures.no_img)
-		error_exit("Error: textura norte no encontrada");
+		error_exit("Error: NORTH texture could not be found");
 	w->textures.so_img = mlx_xpm_file_to_image(
-		data->mlx, w->textures.so_texture, 
-		&w->textures.width, &w->textures.height);
+			data->mlx, w->textures.so_texture,
+			&w->textures.width, &w->textures.height);
 	if (!w->textures.so_img)
-		error_exit("Error: textura sur no encontrada");
+		error_exit("Error: SOUTH texture could not be found");
 	w->textures.we_img = mlx_xpm_file_to_image(
-		data->mlx, w->textures.we_texture, 
-		&w->textures.width, &w->textures.height);
+			data->mlx, w->textures.we_texture,
+			&w->textures.width, &w->textures.height);
 	if (!w->textures.we_img)
-		error_exit("Error: textura oeste no encontrada");
+		error_exit("Error: WEST texture could not be found");
 	w->textures.ea_img = mlx_xpm_file_to_image(
-		data->mlx, w->textures.ea_texture, 
-		&w->textures.width, &w->textures.height);
+			data->mlx, w->textures.ea_texture,
+			&w->textures.width, &w->textures.height);
 	if (!w->textures.ea_img)
-		error_exit("Error: textura este no encontrada");
+		error_exit("Error: EAST texture could not be found");
 	w->textures.no_addr = mlx_get_data_addr(w->textures.no_img,
-		&w->textures.bpp, &w->textures.line_length, &w->textures.endian);
+			&w->textures.bpp, &w->textures.line_length, &w->textures.endian);
 	w->textures.so_addr = mlx_get_data_addr(w->textures.so_img,
-		&w->textures.bpp, &w->textures.line_length, &w->textures.endian);
+			&w->textures.bpp, &w->textures.line_length, &w->textures.endian);
 	w->textures.we_addr = mlx_get_data_addr(w->textures.we_img,
-		&w->textures.bpp, &w->textures.line_length, &w->textures.endian);
+			&w->textures.bpp, &w->textures.line_length, &w->textures.endian);
 	w->textures.ea_addr = mlx_get_data_addr(w->textures.ea_img,
-		&w->textures.bpp, &w->textures.line_length, &w->textures.endian);
+			&w->textures.bpp, &w->textures.line_length, &w->textures.endian);
 }
 
-/* Busca al jugador y configura dirección y plano de cámara */
 static int	init_world_player(t_world *world)
 {
 	size_t	i;
@@ -100,9 +100,6 @@ int	init_world(t_world *world, t_data *data, t_config *cfg)
 	return (init_world_player(world));
 }
 
-//Calcula un vector perpendicular a char_direction, necesario para
-// calcular el angulo con que lanzaremos los rayos, evitando
-// el efecto ojo de pez.
 void	calculate_camera_plane(double char_dir_x, double char_dir_y,
 	t_vector *plane_direction)
 {
@@ -128,8 +125,8 @@ int	main(int argc, char **argv)
 	i = 0;
 	while (i < 256)
 		world.key_down[i++] = false;
-	mlx_hook(data->window, KEY_PRESS, KEY_PRESS_MASK, press_key, &world);
-	mlx_hook(data->window, KEY_RELEASE, KEY_RELEASE_MASK, release_key, &world);
+	mlx_hook(data->window, KEY_PRESS, 1L << 0, press_key, &world);
+	mlx_hook(data->window, KEY_RELEASE, 1L << 1, release_key, &world);
 	mlx_hook(data->window, DESTROY_NOTIFY, 0, close_win, &world);
 	mlx_loop_hook(data->mlx, motor, &world);
 	mlx_loop(data->mlx);
