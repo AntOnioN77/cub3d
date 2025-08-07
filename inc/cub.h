@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 13:31:00 by antofern          #+#    #+#             */
-/*   Updated: 2025/08/05 10:49:14 by antofern         ###   ########.fr       */
+/*   Updated: 2025/08/07 15:16:17 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@
 # define TEXTUR_MAX_RATIO 0.03
 
 # define MAX_RAY_DISTANCE 1e30
-# define ROT_STEP 0.01
+// EN DESUSO # define ROT_STEP 0.01 <----------------------------------------Borrar
 # define ROT_SIN 0.009999833334166664   // sin(0.01)
 # define ROT_COS 0.9999500004166653     // cos(0.01)
-# define MOVE_STEP 0.01
+# define STEP 0.01
 # define M_PI 3.14159265358979323846 //Pi por algun motivo no se carga desde math.h
 # define TEXTURE_WIDTH 64
 # define TEXTURE_HEIGHT 64
@@ -144,12 +144,12 @@ typedef struct s_textures
 // Para poder dibujar las texturas
 typedef struct s_draw_info
 {
-    t_data      *data;
-    t_textures  *tex;
-    char        *tex_addr;
-    int         tex_x;
-    int         line_h;
-    int         i;
+	t_data      *data;
+	t_textures  *tex;
+	char        *tex_addr;
+	int         tex_x;
+	int         line_h;
+	int         i;
 }	t_draw_info;
 
 typedef struct s_world
@@ -168,9 +168,9 @@ typedef struct s_world
 
 typedef struct s_column
 {
-    double distance;
-    t_wall wall;
-    double impact;
+	double distance;
+	t_wall wall;
+	double impact;
 } t_column;
 
 //char_movement.c
@@ -178,7 +178,7 @@ typedef struct s_column
 void	char_movement(t_world *world);
 void	rotate_vector(t_vector *vector, double sinv, double cosv);
 void	set_position(double new_position_x, double new_position_y,
-	t_world *world);
+			t_world *world);
 
 //main.c
 void	calculate_camera_plane(double char_dir_x, double char_dir_y, t_vector *plane_direction);
@@ -194,19 +194,23 @@ int		close_win(t_world *world);
 int		init_data(t_data **data);
 
 //motor.c
-double	hit_on_wall(t_ray *ray, t_world *world, t_wall *wall,
-			double *impact_on_wall);
-double	calc_impact_on_wall(t_vector *ray_dir, t_wall wall,
-			t_world *world, double distance);
-void	go_further(t_ray *ray, t_wall *wall);
 void	set_wall_type(t_wall *wall, t_vector *vector);
 int		motor(t_world *world);
 double	one_ray(int i, t_wall *wall, t_world *world, double *impact_on_wall);
 void	draw_image(t_world *world);
-void	init_ray(t_vector *char_position, const t_vector *vector, t_ray *ray);
-void	calculate_distances(t_world *world, const t_vector vectors[], double distances[], t_wall *wall);
+void	calculate_distances(t_world *world, const t_vector vectors[],
+			double distances[], t_wall *wall);
 void	print_columns(double distances[], t_data *data, t_textures textures);
-void	calc_side_dist(t_ray *ray, t_vector *char_position, const t_vector *vector);
+
+//motor_utils.c
+void	init_ray(t_vector *char_position, const t_vector *vector, t_ray *ray);
+double	hit_on_wall(t_ray *ray, t_world *world, t_wall *wall,
+			double *impact_on);
+double	calc_impact_on_wall(t_vector *ray_dir, t_wall wall,
+			t_world *world, double distance);
+void	go_further(t_ray *ray, t_wall *wall);
+void	calc_side_dist(t_ray *ray, t_vector *char_position,
+			const t_vector *vector);
 
 //map_check.c
 int	has_valid_chars(char **map);
