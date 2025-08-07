@@ -39,9 +39,9 @@
 
 # define MAX_RAY_DISTANCE 1e30
 # define ROT_STEP 0.01
-# define ROT_SIN 0.009999833334166664   // sin(0.01)
-# define ROT_COS 0.9999500004166653     // cos(0.01)
-# define MOVE_STEP 0.01
+# define ROT_SIN 0.0299955002   // sin(0.03)
+# define ROT_COS 0.99955003374     // cos(0.03)
+# define MOVE_STEP 0.03
 # define M_PI 3.14159265358979323846 //Pi por algun motivo no se carga desde math.h
 # define TEXTURE_WIDTH 64
 # define TEXTURE_HEIGHT 64
