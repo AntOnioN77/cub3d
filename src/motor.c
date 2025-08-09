@@ -12,40 +12,6 @@
 
 #include "../inc/cub.h"
 
-static void	clear_background(t_world *world);
-
-//Called iteratively by mlx_loop_hook(), it must update the image and
-// push it to the window.
-int	motor(t_world *world)
-{
-	t_data	*data;
-
-	data = world->data;
-	char_movement(world);
-	draw_image(world);
-	mlx_put_image_to_window(data->mlx, data->window, data->img, 0, 0);
-	return (1);
-}
-
-void	draw_image(t_world *world)
-{
-	int			i;
-	t_column	column;
-
-	ft_bzero(&column, sizeof(t_column));
-	clear_background(world);
-	i = 0;
-	while (i < WINDOW_WIDTH)
-	{
-		column.distance = one_ray(i, &(column.wall), world, &(column.impact));
-		print_one_column(world, i, &column);
-		i++;
-	}
-}
-
-/*
- * Rellena todo el fondo de la imagen con suelo y cielo.
- */
 static void	clear_background(t_world *world)
 {
 	int		x;
@@ -75,7 +41,8 @@ static void	clear_background(t_world *world)
 	}
 }
 
-double	one_ray(int i, t_wall *wall, t_world *world, double *impact_on_wall)
+static double	one_ray(int i, t_wall *wall,
+	t_world *world, double *impact_on_wall)
 {
 	t_ray		ray;
 	double		plane_portion;
@@ -101,4 +68,31 @@ double	one_ray(int i, t_wall *wall, t_world *world, double *impact_on_wall)
 		}
 		go_further(&ray, wall);
 	}
+}
+
+static void	draw_image(t_world *world)
+{
+	int			i;
+	t_column	column;
+
+	ft_bzero(&column, sizeof(t_column));
+	clear_background(world);
+	i = 0;
+	while (i < WINDOW_WIDTH)
+	{
+		column.distance = one_ray(i, &(column.wall), world, &(column.impact));
+		print_one_column(world, i, &column);
+		i++;
+	}
+}
+
+int	motor(t_world *world)
+{
+	t_data	*data;
+
+	data = world->data;
+	char_movement(world);
+	draw_image(world);
+	mlx_put_image_to_window(data->mlx, data->window, data->img, 0, 0);
+	return (1);
 }

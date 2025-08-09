@@ -37,7 +37,7 @@ static char	**collect_map(int fd)
 		line = get_next_line(fd);
 	}
 	if (!rows)
-		error_exit("Mapa vacío o faltante");
+		error_exit("Empty or missing map");
 	return (rows);
 }
 
@@ -47,7 +47,7 @@ void	check_extension(const char *file)
 
 	len = ft_strlen(file);
 	if (len < 4 || ft_strncmp(file + len - 4, ".cub", 4) != 0)
-		error_exit("Error\nExtensión de fichero inválida (debe ser .cub)");
+		error_exit("Error\nIncorrect file extension (must be .cub)");
 }
 
 void	parse_map(const char *path, t_config *cfg)
@@ -57,17 +57,17 @@ void	parse_map(const char *path, t_config *cfg)
 
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
-		error_exit("No se pudo abrir archivo de configuración");
+		error_exit("Could not open the file");
 	parse_config(fd, cfg);
 	cfg->map = collect_map(fd);
 	norm = normalize_map(cfg->map);
 	ft_strarr_free(cfg->map);
 	cfg->map = norm;
 	if (!has_valid_chars(cfg->map))
-		error_exit("Mapa contiene caracteres inválidos");
+		error_exit("Map contains invalid characters");
 	if (!is_map_closed(cfg->map))
-		error_exit("El mapa no está cerrado");
+		error_exit("Map has unclosed walls");
 	if (!has_one_player(cfg->map))
-		error_exit("Debe haber exactamente un jugador");
+		error_exit("There must be exactly 1 player");
 	close(fd);
 }

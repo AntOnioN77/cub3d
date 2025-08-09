@@ -66,7 +66,7 @@ double	calc_impact_on_wall(t_vector *ray_dir, t_wall wall,
 	else if (wall == WEST || wall == EAST)
 		impact_on_wall = world->char_position.y + (distance * ray_dir->y);
 	else
-		perror("Error: one_ray maybe shot to infinite.\n");
+		perror("Error: one_ray was shot to infinite.\n");
 	return ((impact_on_wall - (int)impact_on_wall)
 		* (world->textures.width - 1));
 }
@@ -87,8 +87,6 @@ void	go_further(t_ray *ray, t_wall *wall)
 	}
 }
 
-// ray->side_dist_x: How far to the next gridline in x
-// ray->step_x: We move forward (1) or backward (-1) in x
 void	calc_side_dist(t_ray *ray, t_vector *char_position,
 	const t_vector *vector)
 {

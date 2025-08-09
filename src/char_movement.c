@@ -12,8 +12,24 @@
 
 #include "../inc/cub.h"
 
-static int	aviable_position(double x, double y, t_world *world);
-static int	is_wall(double x, double y, char **map);
+static int	is_wall(double x, double y, char **map)
+{
+	return (map[(int)y][(int)x] == '1');
+}
+
+static int	available_position(double x, double y, t_world *world)
+{
+	if (is_wall(x + PLAYER_RADIUS, y, world->map)
+		|| is_wall(x + PLAYER_RADIUS, y + PLAYER_RADIUS, world->map)
+		|| is_wall(x, y + PLAYER_RADIUS, world->map)
+		|| is_wall(x - PLAYER_RADIUS, y + PLAYER_RADIUS, world->map)
+		|| is_wall(x - PLAYER_RADIUS, y, world->map)
+		|| is_wall(x - PLAYER_RADIUS, y - PLAYER_RADIUS, world->map)
+		|| is_wall(x, y - PLAYER_RADIUS, world->map)
+		|| is_wall(x + PLAYER_RADIUS, y - PLAYER_RADIUS, world->map))
+		return (1);
+	return (0);
+}
 
 void	char_movement(t_world *world)
 {
@@ -45,36 +61,15 @@ void	char_movement(t_world *world)
 
 void	set_position(double new_x, double new_y, t_world *world)
 {
-	if (!aviable_position(new_x, new_y, world))
+	if (!available_position(new_x, new_y, world))
 	{
 		world->char_position.x = new_x;
 		world->char_position.y = new_y;
 	}
-	else if (!aviable_position(new_x, world->char_position.y, world))
+	else if (!available_position(new_x, world->char_position.y, world))
 		world->char_position.x = new_x;
-	else if (!aviable_position(world->char_position.x, new_y, world))
+	else if (!available_position(world->char_position.x, new_y, world))
 		world->char_position.y = new_y;
-}
-
-//It does not check a single point, check an area around x,y
-//	(to avoid getting at distance 0 from a wall)
-static int	aviable_position(double x, double y, t_world *world)
-{
-	if (is_wall(x + PLAYER_RADIUS, y, world->map)
-		|| is_wall(x + PLAYER_RADIUS, y + PLAYER_RADIUS, world->map)
-		|| is_wall(x, y + PLAYER_RADIUS, world->map)
-		|| is_wall(x - PLAYER_RADIUS, y + PLAYER_RADIUS, world->map)
-		|| is_wall(x - PLAYER_RADIUS, y, world->map)
-		|| is_wall(x - PLAYER_RADIUS, y - PLAYER_RADIUS, world->map)
-		|| is_wall(x, y - PLAYER_RADIUS, world->map)
-		|| is_wall(x + PLAYER_RADIUS, y - PLAYER_RADIUS, world->map))
-		return (1);
-	return (0);
-}
-
-static int	is_wall(double x, double y, char **map)
-{
-	return (map[(int)y][(int)x] == '1');
 }
 
 void	rotate_vector(t_vector *v, double sinv, double cosv)
