@@ -166,15 +166,13 @@ void	rotate_vector(t_vector *vector, double sinv, double cosv);
 void	set_position(double new_position_x, double new_position_y,
 			t_world *world);
 
-//main.c
-void	calculate_camera_plane(double char_dir_x, double char_dir_y,
-			t_vector *plane_direction);
-int		init_world(t_world *world, t_data *data, t_config *cfg);
-
 //utils_for_mlx.c
 void	ft_pixel_put(t_data *data, int x, int y, int color);
 int		press_key(int keycode, t_world *world);
 int		release_key(int keycode, t_world *world);
+
+//load_textures.c
+void	load_textures(t_world *w);
 
 //memory_handler.c
 int		close_win(t_world *world);
@@ -214,6 +212,8 @@ void	error_exit(const char *msg);
 size_t	ft_strarr_len(char **arr);
 void	ft_strarr_free(char **arr);
 char	**ft_strarr_append(char **arr, const char *new_str);
+
+//normalize_map.c
 char	**normalize_map(char **map);
 
 //column_printing.c

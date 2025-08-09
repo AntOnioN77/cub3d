@@ -44,7 +44,7 @@ char	**ft_strarr_append(char **arr, const char *new_str)
 	count = ft_strarr_len(arr);
 	new_arr = malloc(sizeof(char *) * (count + 2));
 	if (!new_arr)
-		error_exit("Error de memoria en ft_strarr_append");
+		error_exit("Error trying to assign memory for ft_strarr_append");
 	i = 0;
 	while (i < count)
 	{
@@ -55,35 +55,4 @@ char	**ft_strarr_append(char **arr, const char *new_str)
 	new_arr[count + 1] = NULL;
 	free(arr);
 	return (new_arr);
-}
-
-char	**normalize_map(char **map)
-{
-	int		i;
-	int		max_len;
-	char	**new_map;
-
-	i = 0;
-	max_len = 0;
-	while (map[i])
-	{
-		if ((int)ft_strlen(map[i]) > max_len)
-			max_len = (int)ft_strlen(map[i]);
-		i++;
-	}
-	new_map = malloc(sizeof(char *) * (i + 1));
-	if (!new_map)
-		error_exit("Error de memoria al normalizar el mapa");
-	i = 0;
-	while (map[i])
-	{
-		new_map[i] = ft_calloc(max_len + 1, sizeof(char));
-		if (!new_map[i])
-			error_exit("Error de memoria al normalizar");
-		ft_memset(new_map[i], ' ', max_len);
-		ft_memcpy(new_map[i], map[i], ft_strlen(map[i]));
-		i++;
-	}
-	new_map[i] = NULL;
-	return (new_map);
 }
