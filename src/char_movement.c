@@ -36,22 +36,22 @@ void	char_movement(t_world *world)
 	t_vector	new_pos;
 
 	new_pos = world->char_position;
-	if (world->key_down['d'])
+	if (world->key_down[KEY_D])
 	{
 		rotate_vector(&world->char_direction, ROT_SIN, ROT_COS);
 		rotate_vector(&world->plane_direction, ROT_SIN, ROT_COS);
 	}
-	if (world->key_down['a'])
+	if (world->key_down[KEY_A])
 	{
 		rotate_vector(&world->char_direction, -ROT_SIN, ROT_COS);
 		rotate_vector(&world->plane_direction, -ROT_SIN, ROT_COS);
 	}
-	if (world->key_down['w'])
+	if (world->key_down[KEY_W])
 	{
 		new_pos.x = world->char_position.x + world->char_direction.x * STEP;
 		new_pos.y = world->char_position.y + world->char_direction.y * STEP;
 	}
-	if (world->key_down['s'])
+	if (world->key_down[KEY_S])
 	{
 		new_pos.x = world->char_position.x - world->char_direction.x * STEP;
 		new_pos.y = world->char_position.y - world->char_direction.y * STEP;

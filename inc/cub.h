@@ -51,6 +51,10 @@
 # define ERR_PREFIX "Error\n"
 # define KEY_PRESS        2
 # define KEY_RELEASE      3
+# define KEY_W 44
+# define KEY_A 97
+# define KEY_S 111
+# define KEY_D 101
 # define DESTROY_NOTIFY   17
 
 typedef enum e_wall
