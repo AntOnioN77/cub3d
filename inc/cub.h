@@ -98,6 +98,14 @@ typedef struct s_ray
 	int			step_y;
 }	t_ray;
 
+typedef struct s_minimap
+{
+	int	offset_x;
+	int	offset_y;
+	int	view_w;
+	int	view_h;
+}	t_minimap;
+
 typedef struct s_config
 {
 	char	*tex_no;
