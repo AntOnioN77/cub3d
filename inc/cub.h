@@ -98,6 +98,14 @@ typedef struct s_ray
 	int			step_y;
 }	t_ray;
 
+typedef struct s_minimap
+{
+	int	offset_x;
+	int	offset_y;
+	int	view_w;
+	int	view_h;
+}	t_minimap;
+
 typedef struct s_config
 {
 	char	*tex_no;
@@ -219,6 +227,9 @@ char	**ft_strarr_append(char **arr, const char *new_str);
 
 //normalize_map.c
 char	**normalize_map(char **map);
+
+//minimap.c
+void	draw_minimap(t_world *world);
 
 //column_printing.c
 void	print_one_column(t_world *world, int i, t_column *column);

@@ -93,6 +93,7 @@ int	motor(t_world *world)
 	data = world->data;
 	char_movement(world);
 	draw_image(world);
+	draw_minimap(world);
 	mlx_put_image_to_window(data->mlx, data->window, data->img, 0, 0);
 	return (1);
 }
