@@ -21,13 +21,13 @@ static int	parse_rgb(const char *s)
 
 	parts = ft_split((char *)s, ',');
 	if (!parts || ft_strarr_len(parts) != 3)
-		error_exit("Invalid colour. Format must be RGB");
+		error_exit("Error: Invalid colour. Format must be RGB");
 	r = ft_atoi(parts[0]);
 	g = ft_atoi(parts[1]);
 	b = ft_atoi(parts[2]);
 	ft_strarr_free(parts);
 	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
-		error_exit("Colour components outside of 0-255 allowed range");
+		error_exit("Error: Colour components outside of 0-255 allowed range");
 	return ((r << 16) | (g << 8) | b);
 }
 
@@ -46,7 +46,7 @@ static void	parse_line_config(char *line, t_config *cfg, int *count)
 	else if (ft_strncmp(line, "C ", 2) == 0)
 		cfg->ceil_color = parse_rgb(line + 2);
 	else
-		error_exit("Unknown config input");
+		error_exit("Error: Unknown config input");
 	(*count)++;
 }
 
@@ -78,7 +78,7 @@ void	parse_config(int fd, t_config *cfg)
 	{
 		line = read_next_nonempty(fd);
 		if (!line)
-			error_exit("Missing config lines/info");
+			error_exit("Error: Missing config lines/info");
 		parse_line_config(line, cfg, &count);
 		free(line);
 	}

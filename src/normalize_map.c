@@ -32,7 +32,7 @@ static void	copy_row(char **dst, char *src, int len)
 {
 	*dst = ft_calloc(len + 1, sizeof(char));
 	if (!*dst)
-		error_exit("Memory error trying to normalize map");
+		error_exit("Error: Memory error trying to normalize map");
 	ft_memset(*dst, ' ', len);
 	ft_memcpy(*dst, src, ft_strlen(src));
 }
@@ -49,7 +49,7 @@ char	**normalize_map(char **map)
 		i++;
 	new_map = malloc(sizeof(char *) * (i + 1));
 	if (!new_map)
-		error_exit("Memory error trying to normalize map");
+		error_exit("Error: Memory error trying to normalize map");
 	i = 0;
 	while (map[i])
 	{

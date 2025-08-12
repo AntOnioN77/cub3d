@@ -98,7 +98,7 @@ int	main(int argc, char **argv)
 
 	ft_bzero(&config, sizeof(t_config));
 	if (argc != 2)
-		error_exit("Use: ./cub3D <map_file.cub>");
+		error_exit("Error: Use: ./cub3D <map_file.cub>");
 	check_extension(argv[1]);
 	parse_map(argv[1], &config);
 	init_data(&data);

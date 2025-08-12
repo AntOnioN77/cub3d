@@ -14,7 +14,6 @@
 
 void	error_exit(const char *msg)
 {
-	ft_putstr_fd(ERR_PREFIX, STDERR_FILENO);
 	ft_putstr_fd((char *)msg, STDERR_FILENO);
 	ft_putchar_fd('\n', STDERR_FILENO);
 	exit(EXIT_FAILURE);
@@ -56,7 +55,7 @@ char	**ft_strarr_append(char **arr, const char *new_str)
 	count = ft_strarr_len(arr);
 	new_arr = malloc(sizeof(char *) * (count + 2));
 	if (!new_arr)
-		error_exit("Error trying to assign memory for ft_strarr_append");
+		error_exit("Error: Couldn't assign memory for ft_strarr_append");
 	i = 0;
 	while (i < count)
 	{
