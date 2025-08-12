@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotación 2D de Vectores</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #555;
+            margin-top: 30px;
+            border-left: 4px solid #764ba2;
+            padding-left: 10px;
+        }
+        
+        .formula-box {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            text-align: center;
+        }
+        
+        .code-box {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        .code-comment {
+            color: #6a9955;
+        }
+        
+        .interactive-demo {
+            display: flex;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        canvas {
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: white;
+        }
+        
+        .controls {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 250px;
+        }
+        
+        .control-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        
+        .value-display {
+            text-align: center;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+        }
+        
+        .matrix-display {
+            display: grid;
+            grid-template-columns: auto auto;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+        }
+        
+        .matrix-bracket {
+            font-size: 40px;
+            line-height: 80px;
+        }
+        
+        .matrix-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .explanation-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .vector-info {
+            background: #e7f3ff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: monospace;
+        }
+        
+        .highlight {
+            background: yellow;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Rotación 2D de Vectores en cub3D</h1>
+        
+        <div class="explanation-box">
+            <strong>📌 Concepto Clave:</strong> La rotación 2D permite girar la cámara del jugador en cub3D. 
+            Cuando presionas 'A' o 'D', los vectores de dirección y plano de cámara rotan mediante 
+            transformaciones matemáticas.
+        </div>
+
+        <h2>📐 La Matemática de la Rotación</h2>
+        
+        <p>Para rotar un vector (x, y) por un ángulo θ, aplicamos la siguiente transformación:</p>
+        
+        <div class="formula-box">
+            x' = x · cos(θ) - y · sin(θ)<br>
+            y' = x · sin(θ) + y · cos(θ)
+        </div>
+        
+        <p>Esta fórmula se deriva de la matriz de rotación:</p>
+        
+        <div class="matrix-display">
+            <span class="matrix-bracket">[</span>
+            <div class="matrix-content">
+                <span>cos(θ)</span><span>-sin(θ)</span>
+                <span>sin(θ)</span><span>cos(θ)</span>
+            </div>
+            <span class="matrix-bracket">]</span>
+        </div>
+
+        <h2>🎮 Demostración Interactiva</h2>
+        
+        <div class="interactive-demo">
+            <canvas id="rotationCanvas" width="400" height="400"></canvas>
+            
+            <div class="controls">
+                <div class="control-group">
+                    <label for="angleSlider">Ángulo de Rotación:</label>
+                    <input type="range" id="angleSlider" min="0" max="360" value="0">
+                    <div class="value-display" id="angleDisplay">0°</div>
+                </div>
+                
+                <div class="control-group">
+                    <label for="speedSlider">Velocidad de Animación:</label>
+                    <input type="range" id="speedSlider" min="0" max="5" value="0" step="0.5">
+                    <div class="value-display" id="speedDisplay">Pausa</div>
+                </div>
+                
+                <button id="resetBtn">🔄 Reiniciar</button>
+                
+                <div class="vector-info" id="vectorInfo">
+                    <strong>Vector Original:</strong><br>
+                    x = 1.00, y = 0.00<br><br>
+                    <strong>Vector Rotado:</strong><br>
+                    x' = 1.00, y' = 0.00<br><br>
+                    <strong>sin(θ) = 0.00</strong><br>
+                    <strong>cos(θ) = 1.00</strong>
+                </div>
+            </div>
+        </div>
+
+        <h2>💻 Implementación en cub3D</h2>
+        
+        <p>En tu código, la función <code>rotate_vector</code> implementa exactamente esta fórmula:</p>
+        
+        <div class="code-box">
+<span class="code-comment">// De char_movement.c</span>
+void rotate_vector(t_vector *v, double sinv, double cosv)
+{
+    double nx;
+    double ny;
+    
+    <span class="code-comment">// Aplicamos la matriz de rotación</span>
+    nx = v->x * cosv - v->y * sinv;  <span class="code-comment">// x' = x·cos(θ) - y·sin(θ)</span>
+    ny = v->x * sinv + v->y * cosv;  <span class="code-comment">// y' = x·sin(θ) + y·cos(θ)</span>
+    
+    <span class="code-comment">// Actualizamos el vector</span>
+    v->x = nx;
+    v->y = ny;
+}
+        </div>
+
+        <h2>🎯 Uso en el Movimiento del Jugador</h2>
+        
+        <p>Cuando presionas las teclas de rotación:</p>
+        
+        <div class="code-box">
+if (world->key_down['d'])  <span class="code-comment">// Rotar a la derecha</span>
+{
+    rotate_vector(&world->char_direction, ROT_SIN, ROT_COS);
+    rotate_vector(&world->plane_direction, ROT_SIN, ROT_COS);
+}
+if (world->key_down['a'])  <span class="code-comment">// Rotar a la izquierda</span>
+{
+    rotate_vector(&world->char_direction, -ROT_SIN, ROT_COS);
+    rotate_vector(&world->plane_direction, -ROT_SIN, ROT_COS);
+}
+        </div>
+
+        <div class="explanation-box">
+            <strong>⚙️ Optimización:</strong> En lugar de calcular sin(θ) y cos(θ) cada frame, 
+            cub3D usa constantes precalculadas <span class="highlight">ROT_SIN</span> y 
+            <span class="highlight">ROT_COS</span> para un ángulo fijo pequeño, 
+            aplicando la rotación incrementalmente.
+        </div>
+
+        <h2>🔍 ¿Por qué funciona?</h2>
+        
+        <p><strong>Geometricamente:</strong> La rotación preserva la longitud del vector y solo cambia su dirección. 
+        Imagina el vector como una manecilla de reloj que gira alrededor del origen.</p>
+        
+        <p><strong>En el contexto de cub3D:</strong></p>
+        <ul>
+            <li>El <strong>vector dirección</strong> determina hacia dónde mira el jugador</li>
+            <li>El <strong>plano de cámara</strong> (perpendicular a la dirección) define el campo de visión</li>
+            <li>Ambos deben rotar juntos para mantener la coherencia visual</li>
+            <li>La rotación incremental permite un giro suave y controlado</li>
+        </ul>
+
+        <h2>📊 Ventajas de este Enfoque</h2>
+        
+        <ul>
+            <li>✅ <strong>Eficiente:</strong> Solo 4 multiplicaciones y 2 sumas por vector</li>
+            <li>✅ <strong>Preciso:</strong> No acumula errores de redondeo significativos</li>
+            <li>✅ <strong>Intuitivo:</strong> La matriz de rotación es un concepto matemático estándar</li>
+            <li>✅ <strong>Versátil:</strong> Funciona para cualquier ángulo y cualquier vector</li>
+        </ul>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('rotationCanvas');
+        const ctx = canvas.getContext('2d');
+        const angleSlider = document.getElementById('angleSlider');
+        const angleDisplay = document.getElementById('angleDisplay');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedDisplay = document.getElementById('speedDisplay');
+        const resetBtn = document.getElementById('resetBtn');
+        const vectorInfo = document.getElementById('vectorInfo');
+        
+        let animationSpeed = 0;
+        let currentAngle = 0;
+        
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const scale = 120;
+        
+        function drawGrid() {
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            
+            // Grid lines
+            for (let i = 0; i <= canvas.width; i += 40) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, canvas.height);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(canvas.width, i);
+                ctx.stroke();
+            }
+            
+            // Axes
+            ctx.strokeStyle = '#666';
+            ctx.lineWidth = 2;
+            
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(canvas.width, centerY);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, canvas.height);
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillStyle = '#666';
+            ctx.font = '14px Arial';
+            ctx.fillText('X', canvas.width - 20, centerY - 10);
+            ctx.fillText('Y', centerX + 10, 20);
+        }
+        
+        function drawVector(x, y, color, label, showComponents = false) {
+            const endX = centerX + x * scale;
+            const endY = centerY - y * scale; // Negative because canvas Y is inverted
+            
+            // Vector line
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(endX, endY);
+            ctx.stroke();
+            
+            // Arrowhead
+            const angle = Math.atan2(-y, x);
+            const arrowLength = 15;
+            const arrowAngle = Math.PI / 6;
+            
+            ctx.beginPath();
+            ctx.moveTo(endX, endY);
+            ctx.lineTo(
+                endX - arrowLength * Math.cos(angle - arrowAngle),
+                endY + arrowLength * Math.sin(angle - arrowAngle)
+            );
+            ctx.moveTo(endX, endY);
+            ctx.lineTo(
+                endX - arrowLength * Math.cos(angle + arrowAngle),
+                endY + arrowLength * Math.sin(angle + arrowAngle)
+            );
+            ctx.stroke();
+            
+            // Components
+            if (showComponents) {
+                ctx.strokeStyle = color + '40';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([5, 5]);
+                
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(endX, centerY);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(endX, centerY);
+                ctx.lineTo(endX, endY);
+                ctx.stroke();
+                
+                ctx.setLineDash([]);
+            }
+            
+            // Label
+            ctx.fillStyle = color;
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText(label, endX + 10, endY - 10);
+        }
+        
+        function drawAngleArc(angle) {
+            const radius = 50;
+            
+            ctx.strokeStyle = '#764ba2';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, -angle, true);
+            ctx.stroke();
+            
+            // Angle label
+            const labelAngle = -angle / 2;
+            const labelX = centerX + (radius + 20) * Math.cos(labelAngle);
+            const labelY = centerY + (radius + 20) * Math.sin(labelAngle);
+            
+            ctx.fillStyle = '#764ba2';
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText(`${Math.round(angle * 180 / Math.PI)}°`, labelX - 15, labelY + 5);
+        }
+        
+        function updateDisplay() {
+            const angleRad = currentAngle * Math.PI / 180;
+            const cos = Math.cos(angleRad);
+            const sin = Math.sin(angleRad);
+            
+            // Original vector (1, 0)
+            const origX = 1;
+            const origY = 0;
+            
+            // Rotated vector
+            const rotX = origX * cos - origY * sin;
+            const rotY = origX * sin + origY * cos;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw everything
+            drawGrid();
+            
+            // Draw angle arc
+            if (currentAngle > 0) {
+                drawAngleArc(angleRad);
+            }
+            
+            // Draw vectors
+            drawVector(origX, origY, '#667eea', 'Original', false);
+            drawVector(rotX, rotY, '#e74c3c', 'Rotado', true);
+            
+            // Update info panel
+            vectorInfo.innerHTML = `
+                <strong>Vector Original:</strong><br>
+                x = ${origX.toFixed(2)}, y = ${origY.toFixed(2)}<br><br>
+                <strong>Vector Rotado:</strong><br>
+                x' = ${rotX.toFixed(2)}, y' = ${rotY.toFixed(2)}<br><br>
+                <strong>sin(${Math.round(currentAngle)}°) = ${sin.toFixed(2)}</strong><br>
+                <strong>cos(${Math.round(currentAngle)}°) = ${cos.toFixed(2)}</strong>
+            `;
+            
+            angleDisplay.textContent = `${Math.round(currentAngle)}°`;
+        }
+        
+        function animate() {
+            if (animationSpeed > 0) {
+                currentAngle = (currentAngle + animationSpeed) % 360;
+                angleSlider.value = currentAngle;
+                updateDisplay();
+            }
+            requestAnimationFrame(animate);
+        }
+        
+        angleSlider.addEventListener('input', (e) => {
+            currentAngle = parseFloat(e.target.value);
+            updateDisplay();
+        });
+        
+        speedSlider.addEventListener('input', (e) => {
+            animationSpeed = parseFloat(e.target.value);
+            if (animationSpeed === 0) {
+                speedDisplay.textContent = 'Pausa';
+            } else {
+                speedDisplay.textContent = `${animationSpeed}°/frame`;
+            }
+        });
+        
+        resetBtn.addEventListener('click', () => {
+            currentAngle = 0;
+            angleSlider.value = 0;
+            animationSpeed = 0;
+            speedSlider.value = 0;
+            speedDisplay.textContent = 'Pausa';
+            updateDisplay();
+        });
+        
+        // Initial draw
+        updateDisplay();
+        animate();
+    </script>
+</body>
+</html>

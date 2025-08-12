@@ -100,9 +100,36 @@ int	init_world(t_world *world, t_data *data, t_config *cfg)
 	return (init_world_player(world));
 }
 
-//Calcula un vector perpendicular a char_direction, necesario para
-// calcular el angulo con que lanzaremos los rayos, evitando
-// el efecto ojo de pez.
+/**
+ * calculate_camera_plane - Calcula el vector del plano de proyección de la cámara
+ * 
+ * @char_dir_x: Componente X del vector dirección normalizado del jugador.
+ * @char_dir_y: Componente Y del vector dirección normalizado del jugador.
+ * @plane_direction: Puntero donde se almacenará el vector del plano de cámara calculado.
+ * 
+ * Descripción:
+ * Genera un vector perpendicular al vector dirección del jugador que define el
+ * plano de proyección de la cámara. Este plano es fundamental para el raycasting:
+ * determina el campo de visión (FOV) y se usa para calcular la dirección de cada
+ * rayo. El vector se obtiene rotando 90 grados el vector dirección (intercambiando
+ * componentes y negando uno) y escalándolo por PLANE_MAGNITUDE. La magnitud del
+ * plano controla directamente el FOV: mayor magnitud = mayor FOV. Un valor de 0.66
+ * da aproximadamente 66° de FOV.
+ * 
+ * Retorno:
+ * - void
+ * 
+ * Observaciones:
+ * - La rotación de 90° se logra con la transformación: (x,y) → (-y,x).
+ * - PLANE_MAGNITUDE típicamente vale 0.66 para un FOV realista.
+ * - El plano debe ser perpendicular a la dirección para evitar distorsión.
+ * - Se recalcula cada vez que el jugador rota (en char_movement).
+ * - Un plano más largo simula una lente gran angular; más corto simula teleobjetivo.
+ * - Este vector define la "anchura" del campo visual en el espacio del mundo.
+ * 
+ * Funciones llamadas:
+ * - Ninguna
+ */
 void	calculate_camera_plane(double char_dir_x, double char_dir_y,
 	t_vector *plane_direction)
 {
